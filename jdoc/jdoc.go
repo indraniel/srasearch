@@ -5,6 +5,7 @@ import (
 	"github.com/indraniel/srasearch/sra"
 	"bytes"
 	"compress/gzip"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -60,6 +61,9 @@ func ProcessNCBITarFile(tarfile string) {
 			)
 		}
 		i++
+		//		if i == 100 {
+		//			os.Exit(0)
+		//		}
 	}
 }
 
@@ -72,8 +76,18 @@ func isXML(filename string) bool {
 
 func processXML(name string, contents *bytes.Buffer) {
 	si := sra.NewSraItemFromXML(name, contents.Bytes())
-	fmt.Println("---")
-	io.Copy(os.Stdout, bytes.NewBufferString(si.Data.String()))
-	fmt.Println("---")
-	os.Exit(0)
+	//	fmt.Println("---")
+	//io.Copy(os.Stdout, bytes.NewBufferString(si.Data.String()))
+	json, err := json.Marshal(si)
+	if err != nil {
+		log.Fatal("Trouble encoding '%s' into json: %s\n",
+			name, err)
+	}
+	os.Stdout.Write(json)
+	os.Stdout.Write([]byte("\n"))
+	//	if si.SubmissionId == "SRA114550" {
+	//		fmt.Println(si.Data.XMLString())
+	//		fmt.Println("")
+	//	}
+	//	fmt.Println("---")
 }
