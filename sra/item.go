@@ -9,6 +9,8 @@ import (
 
 type Schemer interface {
 	String() string
+	XMLString() string
+	GetAccessions() []string
 }
 
 type SraItem struct {

@@ -26,3 +26,7 @@ func (sr SraSample) XMLString() string {
 	}
 	return string(xml)
 }
+
+func (sr SraSample) GetAccessions() []string {
+	return []string{}
+}

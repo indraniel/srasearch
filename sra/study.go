@@ -31,3 +31,7 @@ func (sr SraStudy) XMLString() string {
 	}
 	return string(xml)
 }
+
+func (sr SraStudy) GetAccessions() []string {
+	return []string{}
+}
