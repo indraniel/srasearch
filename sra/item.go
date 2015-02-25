@@ -1,5 +1,8 @@
 package sra
 
+// What do the different SRA accessions represent?
+// http://www.ncbi.nlm.nih.gov/books/NBK56913/#search.what_do_the_different_sra_accessi
+
 import (
 	"encoding/xml"
 	"log"
@@ -14,9 +17,10 @@ type Schemer interface {
 }
 
 type SraItem struct {
-	Id   string
-	Type string
-	Data Schemer
+	SubmissionId string
+	XMLFileName  string
+	Type         string
+	Data         Schemer
 }
 
 func NewSraItemFromXML(filename string, contents []byte) *SraItem {
@@ -24,17 +28,18 @@ func NewSraItemFromXML(filename string, contents []byte) *SraItem {
 	id, sraType, _ := parseXMLFileName(basename)
 	data := parseXMLContents(sraType, contents)
 	si := &SraItem{
-		Id:   id,
-		Type: sraType,
-		Data: data,
+		SubmissionId: id,
+		XMLFileName:  basename,
+		Type:         sraType,
+		Data:         data,
 	}
 	return si
 }
 
 func parseXMLFileName(filename string) (string, string, string) {
 	items := strings.Split(filename, ".")
-	id, sraType, extension := items[0], items[1], items[2]
-	return id, sraType, extension
+	submissionAccession, sraType, extension := items[0], items[1], items[2]
+	return submissionAccession, sraType, extension
 }
 
 func parseXMLContents(sraType string, contents []byte) Schemer {
