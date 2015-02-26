@@ -16,22 +16,29 @@ type SraAnalysis struct {
 	sraanalysis.TAnalysisSetType
 }
 
-func (sr SraAnalysis) String() string {
-	json, err := json.MarshalIndent(sr, "", "\t")
+func (sa SraAnalysis) String() string {
+	json, err := json.MarshalIndent(sa, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(json)
 }
 
-func (sr SraAnalysis) XMLString() string {
-	xml, err := xml.MarshalIndent(sr, "", "\t")
+func (sa SraAnalysis) XMLString() string {
+	xml, err := xml.MarshalIndent(sa, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(xml)
 }
 
-func (sr SraAnalysis) GetAccessions() []string {
-	return []string{}
+func (sa SraAnalysis) GetAccessions() []string {
+	analyses := sa.TAnalysisSetType.Analysises
+
+	accessions := make([]string, 0)
+	for _, v := range analyses {
+		accessions = append(accessions, v.Accession.String())
+	}
+
+	return accessions
 }

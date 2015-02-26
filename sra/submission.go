@@ -16,22 +16,24 @@ type SraSubmission struct {
 	srasubmission.TSubmissionType
 }
 
-func (sr SraSubmission) String() string {
-	json, err := json.MarshalIndent(sr, "", "\t")
+func (ss SraSubmission) String() string {
+	json, err := json.MarshalIndent(ss, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(json)
 }
 
-func (sr SraSubmission) XMLString() string {
-	xml, err := xml.MarshalIndent(sr, "", "\t")
+func (ss SraSubmission) XMLString() string {
+	xml, err := xml.MarshalIndent(ss, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(xml)
 }
 
-func (sr SraSubmission) GetAccessions() []string {
-	return []string{}
+func (ss SraSubmission) GetAccessions() []string {
+	submission := ss.TSubmissionType
+	accessions := []string{submission.Accession.String()}
+	return accessions
 }

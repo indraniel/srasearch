@@ -16,22 +16,29 @@ type SraStudy struct {
 	srastudy.TStudySetType
 }
 
-func (sr SraStudy) String() string {
-	json, err := json.MarshalIndent(sr, "", "\t")
+func (ss SraStudy) String() string {
+	json, err := json.MarshalIndent(ss, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(json)
 }
 
-func (sr SraStudy) XMLString() string {
-	xml, err := xml.MarshalIndent(sr, "", "\t")
+func (ss SraStudy) XMLString() string {
+	xml, err := xml.MarshalIndent(ss, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(xml)
 }
 
-func (sr SraStudy) GetAccessions() []string {
-	return []string{}
+func (ss SraStudy) GetAccessions() []string {
+	studies := ss.TStudySetType.Studies
+
+	accessions := make([]string, 0)
+	for _, v := range studies {
+		accessions = append(accessions, v.Accession.String())
+	}
+
+	return accessions
 }

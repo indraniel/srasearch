@@ -16,22 +16,29 @@ type SraExp struct {
 	sraexp.TExperimentSetType
 }
 
-func (sr SraExp) String() string {
-	json, err := json.MarshalIndent(sr, "", "\t")
+func (se SraExp) String() string {
+	json, err := json.MarshalIndent(se, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(json)
 }
 
-func (sr SraExp) XMLString() string {
-	xml, err := xml.MarshalIndent(sr, "", "\t")
+func (se SraExp) XMLString() string {
+	xml, err := xml.MarshalIndent(se, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(xml)
 }
 
-func (sr SraExp) GetAccessions() []string {
-	return []string{}
+func (se SraExp) GetAccessions() []string {
+	exps := se.TExperimentSetType.Experiments
+
+	accessions := make([]string, 0)
+	for _, v := range exps {
+		accessions = append(accessions, v.Accession.String())
+	}
+
+	return accessions
 }

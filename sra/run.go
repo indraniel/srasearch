@@ -33,5 +33,12 @@ func (sr SraRun) XMLString() string {
 }
 
 func (sr SraRun) GetAccessions() []string {
-	return []string{}
+	runs := sr.TxsdRunSet.Runs
+
+	accessions := make([]string, 0)
+	for _, v := range runs {
+		accessions = append(accessions, v.Accession.String())
+	}
+
+	return accessions
 }

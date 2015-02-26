@@ -11,22 +11,29 @@ type SraSample struct {
 	srasample.TSampleSetType
 }
 
-func (sr SraSample) String() string {
-	json, err := json.MarshalIndent(sr, "", "\t")
+func (ss SraSample) String() string {
+	json, err := json.MarshalIndent(ss, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(json)
 }
 
-func (sr SraSample) XMLString() string {
-	xml, err := xml.MarshalIndent(sr, "", "\t")
+func (ss SraSample) XMLString() string {
+	xml, err := xml.MarshalIndent(ss, "", "\t")
 	if err != nil {
 		panic(err)
 	}
 	return string(xml)
 }
 
-func (sr SraSample) GetAccessions() []string {
-	return []string{}
+func (ss SraSample) GetAccessions() []string {
+	samples := ss.TSampleSetType.Samples
+
+	accessions := make([]string, 0)
+	for _, v := range samples {
+		accessions = append(accessions, v.Accession.String())
+	}
+
+	return accessions
 }

@@ -17,10 +17,24 @@ type Schemer interface {
 }
 
 type SraItem struct {
+	Id           string
 	SubmissionId string
 	XMLFileName  string
 	Type         string
 	Data         Schemer
+}
+
+func (si *SraItem) setId() {
+	accessions := si.Data.GetAccessions()
+
+	var id string
+	if len(accessions) == 0 {
+		id = strings.Join([]string{si.SubmissionId, si.Type}, ".")
+	} else {
+		id = strings.Join(accessions, ",")
+	}
+
+	si.Id = id
 }
 
 func NewSraItemFromXML(filename string, contents []byte) *SraItem {
@@ -33,6 +47,7 @@ func NewSraItemFromXML(filename string, contents []byte) *SraItem {
 		Type:         sraType,
 		Data:         data,
 	}
+	si.setId()
 	return si
 }
 
