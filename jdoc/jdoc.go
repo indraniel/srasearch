@@ -46,7 +46,7 @@ func ProcessNCBITarFile(tarfile string) {
 		case tar.TypeDir:
 			continue
 		case tar.TypeReg:
-			fmt.Println("(", i, ")", "Name:", name)
+			//			fmt.Println("(", i, ")", "Name:", name)
 			if isXML(name) {
 				buf := new(bytes.Buffer)
 				io.Copy(buf, tarReader)
@@ -75,6 +75,10 @@ func isXML(filename string) bool {
 }
 
 func processXML(name string, contents *bytes.Buffer) {
+	//	fmt.Println(name)
+	//	if name == "NCBI_SRA_Metadata_Full_WUGSC_20150101/SRA176960/SRA176960.submission.xml" || name == "NCBI_SRA_Metadata_Full_WUGSC_20150101/SRA176960/SRA176960.study.xml" {
+	//		io.Copy(os.Stdout, contents)
+	//	}
 	sraItems := sra.NewSraItemsFromXML(name, contents.Bytes())
 	for _, si := range sraItems {
 		json, err := json.Marshal(si)
@@ -85,16 +89,17 @@ func processXML(name string, contents *bytes.Buffer) {
 		os.Stdout.Write(json)
 		os.Stdout.Write([]byte("\n"))
 	}
-	//	fmt.Println("---")
-	//io.Copy(os.Stdout, bytes.NewBufferString(si.Data.String()))
+	//fmt.Println("---")
+	//	io.Copy(os.Stdout, bytes.NewBufferString(si.Data.String()))
 	//	json, err := json.Marshal(si)
 	//	if err != nil {
 	//		log.Fatal("Trouble encoding '%s' into json: %s\n",
 	//			name, err)
 	//	}
-	//	os.Stdout.Write(json)
-	//	os.Stdout.Write([]byte("\n"))
-	//	if si.SubmissionId == "SRA114550" {
+	//os.Stdout.Write(json)
+	//os.Stdout.Write([]byte("\n"))
+	//if si.SubmissionId == "SRA114550" {
+	//	if name == "SRA114550" {
 	//		fmt.Println(si.Data.XMLString())
 	//		fmt.Println("")
 	//	}
