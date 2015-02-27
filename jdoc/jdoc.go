@@ -75,16 +75,25 @@ func isXML(filename string) bool {
 }
 
 func processXML(name string, contents *bytes.Buffer) {
-	si := sra.NewSraItemFromXML(name, contents.Bytes())
+	sraItems := sra.NewSraItemsFromXML(name, contents.Bytes())
+	for _, si := range sraItems {
+		json, err := json.Marshal(si)
+		if err != nil {
+			log.Fatal("Trouble encoding '%s' into json: %s\n",
+				name, err)
+		}
+		os.Stdout.Write(json)
+		os.Stdout.Write([]byte("\n"))
+	}
 	//	fmt.Println("---")
 	//io.Copy(os.Stdout, bytes.NewBufferString(si.Data.String()))
-	json, err := json.Marshal(si)
-	if err != nil {
-		log.Fatal("Trouble encoding '%s' into json: %s\n",
-			name, err)
-	}
-	os.Stdout.Write(json)
-	os.Stdout.Write([]byte("\n"))
+	//	json, err := json.Marshal(si)
+	//	if err != nil {
+	//		log.Fatal("Trouble encoding '%s' into json: %s\n",
+	//			name, err)
+	//	}
+	//	os.Stdout.Write(json)
+	//	os.Stdout.Write([]byte("\n"))
 	//	if si.SubmissionId == "SRA114550" {
 	//		fmt.Println(si.Data.XMLString())
 	//		fmt.Println("")

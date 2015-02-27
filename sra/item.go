@@ -10,10 +10,15 @@ import (
 	"strings"
 )
 
-type Schemer interface {
+type SRASetter interface {
+	GetItems() []Itemer
+	GetAccessions() []string
+}
+
+type Itemer interface {
 	String() string
 	XMLString() string
-	GetAccessions() []string
+	GetAccession() string
 }
 
 type SraItem struct {
@@ -21,34 +26,32 @@ type SraItem struct {
 	SubmissionId string
 	XMLFileName  string
 	Type         string
-	Data         Schemer
+	Data         Itemer
 }
 
 func (si *SraItem) setId() {
-	accessions := si.Data.GetAccessions()
-
-	var id string
-	if len(accessions) == 0 {
-		id = strings.Join([]string{si.SubmissionId, si.Type}, ".")
-	} else {
-		id = strings.Join(accessions, ",")
-	}
-
-	si.Id = id
+	accession := si.Data.GetAccession()
+	si.Id = accession
 }
 
-func NewSraItemFromXML(filename string, contents []byte) *SraItem {
+func NewSraItemsFromXML(filename string, contents []byte) []*SraItem {
 	basename := filepath.Base(filename)
 	id, sraType, _ := parseXMLFileName(basename)
-	data := parseXMLContents(sraType, contents)
-	si := &SraItem{
-		SubmissionId: id,
-		XMLFileName:  basename,
-		Type:         sraType,
-		Data:         data,
+	set := parseXMLContents(sraType, contents)
+
+	sraItems := make([]*SraItem, 0)
+
+	for _, item := range set.GetItems() {
+		si := &SraItem{
+			SubmissionId: id,
+			XMLFileName:  basename,
+			Type:         sraType,
+			Data:         item,
+		}
+		si.setId()
+		sraItems = append(sraItems, si)
 	}
-	si.setId()
-	return si
+	return sraItems
 }
 
 func parseXMLFileName(filename string) (string, string, string) {
@@ -57,29 +60,29 @@ func parseXMLFileName(filename string) (string, string, string) {
 	return submissionAccession, sraType, extension
 }
 
-func parseXMLContents(sraType string, contents []byte) Schemer {
-	var data Schemer
+func parseXMLContents(sraType string, contents []byte) SRASetter {
+	var data SRASetter
 	switch sraType {
 	case "analysis":
-		var analysis SraAnalysis
-		xml.Unmarshal(contents, &analysis)
-		data = analysis
+		var analyses SraAnalysisSet
+		xml.Unmarshal(contents, &analyses)
+		data = analyses
 	case "experiment":
-		var exp SraExp
-		xml.Unmarshal(contents, &exp)
-		data = exp
+		var exps SraExpSet
+		xml.Unmarshal(contents, &exps)
+		data = exps
 	case "run":
-		var run SraRun
-		xml.Unmarshal(contents, &run)
-		data = run
+		var runs SraRunSet
+		xml.Unmarshal(contents, &runs)
+		data = runs
 	case "sample":
-		var sample SraSample
-		xml.Unmarshal(contents, &sample)
-		data = sample
+		var samples SraSampleSet
+		xml.Unmarshal(contents, &samples)
+		data = samples
 	case "study":
-		var study SraStudy
-		xml.Unmarshal(contents, &study)
-		data = study
+		var studies SraStudySet
+		xml.Unmarshal(contents, &studies)
+		data = studies
 	case "submission":
 		var submission SraSubmission
 		xml.Unmarshal(contents, &submission)

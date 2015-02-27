@@ -6,13 +6,8 @@ import (
 	srasubmission "github.com/indraniel/go-sra-schemas-1.5/SRA.submission.xsd_go"
 )
 
-type SraSubmissionXML struct {
-	FileName string
-	XML      SraSubmission
-}
-
 type SraSubmission struct {
-	XMLName xml.Name `xml:"RUN_SET"`
+	XMLName xml.Name `xml:"SUBMISSION"`
 	srasubmission.TSubmissionType
 }
 
@@ -32,8 +27,15 @@ func (ss SraSubmission) XMLString() string {
 	return string(xml)
 }
 
+func (ss SraSubmission) GetItems() []Itemer {
+	return []Itemer{Itemer(ss)}
+}
+
 func (ss SraSubmission) GetAccessions() []string {
-	submission := ss.TSubmissionType
-	accessions := []string{submission.Accession.String()}
+	accessions := []string{ss.Accession.String()}
 	return accessions
+}
+
+func (ss SraSubmission) GetAccession() string {
+	return ss.Accession.String()
 }
