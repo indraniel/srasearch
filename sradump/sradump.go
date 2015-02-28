@@ -1,4 +1,4 @@
-package jdoc
+package sradump
 
 import (
 	"archive/tar"
@@ -13,7 +13,7 @@ import (
 	"path"
 )
 
-func ProcessNCBITarFile(tarfile string) {
+func ProcessTarXMLs(tarfile string, db *map[string]*sra.AccessionRecord) {
 	f, err := os.Open(tarfile)
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func ProcessNCBITarFile(tarfile string) {
 			if isXML(name) {
 				buf := new(bytes.Buffer)
 				io.Copy(buf, tarReader)
-				processXML(name, buf)
+				processXML(db, name, buf)
 			}
 		default:
 			fmt.Printf("%s: %c %s %s\n",
@@ -74,9 +74,10 @@ func isXML(filename string) bool {
 	return false
 }
 
-func processXML(name string, contents *bytes.Buffer) {
+func processXML(db *map[string]*sra.AccessionRecord, name string, contents *bytes.Buffer) {
 	sraItems := sra.NewSraItemsFromXML(name, contents.Bytes())
 	for _, si := range sraItems {
+		si.AddAttrFromAccessionRecords(db)
 		json, err := json.Marshal(si)
 		if err != nil {
 			log.Fatal("Trouble encoding '%s' into json: %s\n",

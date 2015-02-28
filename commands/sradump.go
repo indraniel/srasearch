@@ -1,24 +1,27 @@
 package commands
 
 import (
-	"github.com/indraniel/srasearch/jdoc"
-	"fmt"
+	"github.com/indraniel/srasearch/sradump"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
 )
 
 var cmdTransform = &cobra.Command{
-	Use:   "transform [path/to/NCBIDownloadTarFile]",
-	Short: "Transform the NCBI Batch Telemetry tar file to a JSON Document",
+	Use:   "sra-dump [path/to/NCBIDownloadTarFile]",
+	Short: "Transform the NCBI Batch Telemetry tar files to a set of JSON Docs",
 	Long: `This command transforms the raw NCBI Batch Telemetry tar file
-         contents into a file of custom JSON Documents`,
+         contents into a intermediary file of custom JSON Documents`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Here I am in the 'transform' command!")
 		tarfile := getTarFile(args)
 		checkTarExists(tarfile)
-		jdoc.ProcessNCBITarFile(tarfile)
+		makeSraDump(tarfile)
 	},
+}
+
+func makeSraDump(tarfile string) {
+	db := sradump.CollectAccessionStats(tarfile)
+	sradump.ProcessTarXMLs(tarfile, db)
 }
 
 func getTarFile(args []string) (tarfile string) {

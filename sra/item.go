@@ -8,6 +8,7 @@ import (
 	"log"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type SRASetter interface {
@@ -26,12 +27,29 @@ type SraItem struct {
 	SubmissionId string
 	XMLFileName  string
 	Type         string
+	Status       string
+	Updated      time.Time
+	Published    time.Time
+	Received     time.Time
+	Visibility   string
 	Data         Itemer
 }
 
 func (si *SraItem) setId() {
 	accession := si.Data.GetAccession()
 	si.Id = accession
+}
+
+func (si *SraItem) AddAttrFromAccessionRecords(
+	db *map[string]*AccessionRecord,
+) {
+	if data, ok := (*db)[si.Id]; ok {
+		si.Status = data.Status
+		si.Updated = data.Updated
+		si.Published = data.Published
+		si.Received = data.Received
+		si.Visibility = data.Visibility
+	}
 }
 
 func NewSraItemsFromXML(filename string, contents []byte) []*SraItem {
