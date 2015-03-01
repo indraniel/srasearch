@@ -4,7 +4,6 @@ import (
 	"archive/tar"
 	"github.com/indraniel/srasearch/sra"
 	"bytes"
-	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -13,20 +12,21 @@ import (
 	"path"
 )
 
-func ProcessTarXMLs(tarfile string, db *map[string]*sra.AccessionRecord) {
-	f, err := os.Open(tarfile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	gzf, err := gzip.NewReader(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer gzf.Close()
+func ProcessTarXMLs(
+	tarfile string,
+	db *map[string]*sra.AccessionRecord,
+	outFile string,
+) {
+	f, gzf := openGZFile(tarfile)
+	defer closeGZFile(f, gzf)
 
 	tarReader := tar.NewReader(gzf)
+
+	outPtr, err := os.Create(outFile)
+	if err != nil {
+		log.Fatal("Trouble opening %s for writing : %s\n", outFile, err)
+	}
+	defer outPtr.Close()
 
 	i := 0
 	for {
@@ -50,7 +50,7 @@ func ProcessTarXMLs(tarfile string, db *map[string]*sra.AccessionRecord) {
 			if isXML(name) {
 				buf := new(bytes.Buffer)
 				io.Copy(buf, tarReader)
-				processXML(db, name, buf)
+				processXML(db, outPtr, name, buf)
 			}
 		default:
 			fmt.Printf("%s: %c %s %s\n",
@@ -74,7 +74,12 @@ func isXML(filename string) bool {
 	return false
 }
 
-func processXML(db *map[string]*sra.AccessionRecord, name string, contents *bytes.Buffer) {
+func processXML(
+	db *map[string]*sra.AccessionRecord,
+	outPtr *os.File,
+	name string,
+	contents *bytes.Buffer,
+) {
 	sraItems := sra.NewSraItemsFromXML(name, contents.Bytes())
 	for _, si := range sraItems {
 		si.AddAttrFromAccessionRecords(db)
@@ -83,7 +88,15 @@ func processXML(db *map[string]*sra.AccessionRecord, name string, contents *byte
 			log.Fatal("Trouble encoding '%s' into json: %s\n",
 				name, err)
 		}
-		os.Stdout.Write(json)
-		os.Stdout.Write([]byte("\n"))
+		_, err = outPtr.Write(json)
+		checkWrite(outPtr, err)
+		_, err = outPtr.Write([]byte("\n"))
+		checkWrite(outPtr, err)
+	}
+}
+
+func checkWrite(f *os.File, e error) {
+	if e != nil {
+		log.Fatal("Trouble writing to '%s' : %s\n", f.Name(), e)
 	}
 }

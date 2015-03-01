@@ -4,12 +4,10 @@ import (
 	"archive/tar"
 	"github.com/indraniel/srasearch/sra"
 	"bytes"
-	"compress/gzip"
 	"encoding/csv"
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"strings"
 	"time"
 )
@@ -51,7 +49,7 @@ func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
 		db[accession] = r
 	}
 
-	fmt.Println("Processed", i, "accession records")
+	log.Println("Processed", i, "accession records")
 	return &db
 }
 
@@ -68,17 +66,8 @@ func parseTime(ts string) time.Time {
 }
 
 func getAccessionFileContents(tarfile string) *bytes.Buffer {
-	f, err := os.Open(tarfile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	gzf, err := gzip.NewReader(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer gzf.Close()
+	f, gzf := openGZFile(tarfile)
+	defer closeGZFile(f, gzf)
 
 	tarReader := tar.NewReader(gzf)
 

@@ -25,5 +25,5 @@ func Execute(semanticVersion string) {
 }
 
 func AddCommands() {
-	rootCmd.AddCommand(cmdTransform)
+	rootCmd.AddCommand(cmdSraDump)
 }
