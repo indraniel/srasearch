@@ -3,6 +3,7 @@ package sradump
 import (
 	"archive/tar"
 	"github.com/indraniel/srasearch/sra"
+	"github.com/indraniel/srasearch/utils"
 	"bytes"
 	"encoding/csv"
 	"fmt"
@@ -66,8 +67,8 @@ func parseTime(ts string) time.Time {
 }
 
 func getAccessionFileContents(tarfile string) *bytes.Buffer {
-	f, gzf := openGZFile(tarfile)
-	defer closeGZFile(f, gzf)
+	f, gzf := utils.OpenGZFile(tarfile)
+	defer utils.CloseGZFile(f, gzf)
 
 	tarReader := tar.NewReader(gzf)
 

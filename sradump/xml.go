@@ -3,6 +3,7 @@ package sradump
 import (
 	"archive/tar"
 	"github.com/indraniel/srasearch/sra"
+	"github.com/indraniel/srasearch/utils"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -17,8 +18,8 @@ func ProcessTarXMLs(
 	db *map[string]*sra.AccessionRecord,
 	outFile string,
 ) {
-	f, gzf := openGZFile(tarfile)
-	defer closeGZFile(f, gzf)
+	f, gzf := utils.OpenGZFile(tarfile)
+	defer utils.CloseGZFile(f, gzf)
 
 	tarReader := tar.NewReader(gzf)
 

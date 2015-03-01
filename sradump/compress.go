@@ -62,22 +62,3 @@ func CompressDumpFile(src string, dst string) error {
 
 	return nil
 }
-
-func openGZFile(filename string) (*os.File, *gzip.Reader) {
-	f, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	gzf, err := gzip.NewReader(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return f, gzf
-}
-
-func closeGZFile(f *os.File, gzf *gzip.Reader) {
-	f.Close()
-	gzf.Close()
-}
