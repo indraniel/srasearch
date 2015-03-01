@@ -21,7 +21,8 @@ var cmdSraDump = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		tarfile := getTarFile(args)
 		checkTarExists(tarfile)
-		makeSraDump(tarfile)
+		SraDumpOpts.processOpts()
+		SraDumpOpts.mainRun(tarfile)
 	},
 }
 
@@ -35,8 +36,17 @@ func init() {
 	)
 }
 
-func makeSraDump(tarfile string) {
-	sradump.RunSraDump(tarfile, SraDumpOpts.output)
+func (opts SraDumpCmdOpts) mainRun(tarfile string) {
+	sradump.RunSraDump(tarfile, opts.output)
+}
+
+func (opts SraDumpCmdOpts) processOpts() {
+	if opts.output == "" {
+		log.Fatal(
+			"Please supply an gzip output file to dump",
+			"to via --output !",
+		)
+	}
 }
 
 func checkTarExists(tarfile string) {
