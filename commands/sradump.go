@@ -3,7 +3,6 @@ package commands
 import (
 	"github.com/indraniel/srasearch/sradump"
 	"github.com/spf13/cobra"
-	"io/ioutil"
 	"log"
 	"os"
 )
@@ -37,40 +36,16 @@ func init() {
 }
 
 func makeSraDump(tarfile string) {
-	log.Println("Collecting Accession Stats")
-	db := sradump.CollectAccessionStats(tarfile)
-
-	log.Println("Processing XMLs / Creating Dump File")
-
-	tmpdir, tmpfile := makeTmpFile()
-	defer os.Remove(tmpfile)
-	defer os.Remove(tmpdir)
-	log.Println("Tmp Dump File is:", tmpfile)
-	sradump.ProcessTarXMLs(tarfile, db, tmpfile)
-
-	log.Println("Compressing Dump File")
-	err := sradump.CompressDumpFile(tmpfile, SraDumpOpts.output)
-	if err != nil {
-		log.Print("Trouble making gzip file:", err)
-		return
-	}
-	log.Println("All Done!")
+	sradump.RunSraDump(tarfile, SraDumpOpts.output)
 }
 
-func makeTmpFile() (tmpdir, tmpfile string) {
-	tmpdir, err := ioutil.TempDir(os.TempDir(), "sra-dump")
-	if err != nil {
-		log.Fatal("Trouble making temp dir:", err)
+func checkTarExists(tarfile string) {
+	if _, err := os.Stat(tarfile); os.IsNotExist(err) {
+		log.Fatalf(
+			"Could not find '%s' on file system: %s",
+			tarfile, err,
+		)
 	}
-
-	f, err := ioutil.TempFile(tmpdir, "sra-tmp-dump")
-	if err != nil {
-		log.Fatal("Trouble making temp file:", err)
-	}
-	defer f.Close()
-
-	tmpfile = f.Name()
-	return
 }
 
 func getTarFile(args []string) (tarfile string) {
@@ -85,13 +60,4 @@ func getTarFile(args []string) (tarfile string) {
 	}
 
 	return
-}
-
-func checkTarExists(tarfile string) {
-	if _, err := os.Stat(tarfile); os.IsNotExist(err) {
-		log.Fatalf(
-			"Could not find '%s' on file system: %s",
-			tarfile, err,
-		)
-	}
 }
