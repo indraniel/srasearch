@@ -43,6 +43,7 @@ func CompressDumpFile(src string, dst string) error {
 	if err != nil {
 		return err
 	}
+	defer gz.CloseGZ()
 
 	log.Println("Writing compress data to:", gz.f.Name())
 	in, err := os.Open(src)
