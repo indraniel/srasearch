@@ -4,7 +4,10 @@ package sra
 // http://www.ncbi.nlm.nih.gov/books/NBK56913/#search.what_do_the_different_sra_accessi
 
 import (
+	"bytes"
+	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"log"
 	"path/filepath"
 	"strings"
@@ -50,6 +53,132 @@ func (si *SraItem) AddAttrFromAccessionRecords(
 		si.Received = data.Received
 		si.Visibility = data.Visibility
 	}
+}
+
+func (si *SraItem) UnmarshalJSON(data []byte) error {
+	var aux struct {
+		Id           string
+		SubmissionId string
+		XMLFileName  string
+		Type         string
+		Status       string
+		Visibility   string
+		Updated      string
+		Published    string
+		Received     string
+		Data         json.RawMessage
+	}
+
+	dec := json.NewDecoder(bytes.NewReader(data))
+	if err := dec.Decode(&aux); err != nil {
+		return fmt.Errorf("decode sra item: %v", err)
+	}
+
+	si.Id = aux.Id
+	si.SubmissionId = aux.SubmissionId
+	si.XMLFileName = aux.XMLFileName
+	si.Type = aux.Type
+	si.Status = aux.Status
+	si.Visibility = aux.Visibility
+
+	t, err := time.Parse("2006-01-02T15:04:05Z", aux.Updated)
+	if err != nil {
+		return fmt.Errorf(
+			"%s: '%s' : %s\n",
+			"JSON Unmarshal error: Trouble parsing timestamp",
+			aux.Updated,
+			err,
+		)
+	}
+	si.Updated = t
+
+	t, err = time.Parse("2006-01-02T15:04:05Z", aux.Published)
+	if err != nil {
+		return fmt.Errorf(
+			"%s: '%s' : %s\n",
+			"JSON Unmarshal error: Trouble parsing timestamp",
+			aux.Published,
+			err,
+		)
+	}
+	si.Published = t
+
+	t, err = time.Parse("2006-01-02T15:04:05Z", aux.Received)
+	if err != nil {
+		return fmt.Errorf(
+			"%s: '%s' : %s\n",
+			"JSON Unmarshal error: Trouble parsing timestamp",
+			aux.Received,
+			err,
+		)
+	}
+	si.Received = t
+
+	var item Itemer
+	switch si.Type {
+	case "analysis":
+		var analysis SraAnalysis
+		err = json.Unmarshal([]byte(aux.Data), &analysis)
+		if err != nil {
+			return fmt.Errorf(
+				"[SraAnalysis] JSON Unmarshal error: %v", err,
+			)
+		}
+		item = analysis
+	case "experiment":
+		var exp SraExp
+		err = json.Unmarshal([]byte(aux.Data), &exp)
+		if err != nil {
+			return fmt.Errorf(
+				"[SraExp] JSON Unmarshal error: %v", err,
+			)
+		}
+		item = exp
+	case "run":
+		var run SraRun
+		err = json.Unmarshal([]byte(aux.Data), &run)
+		if err != nil {
+			return fmt.Errorf(
+				"[SraRun] JSON Unmarshal error: %v", err,
+			)
+		}
+		item = run
+	case "sample":
+		var sample SraSample
+		err = json.Unmarshal([]byte(aux.Data), &sample)
+		if err != nil {
+			return fmt.Errorf(
+				"[SraSample] JSON Unmarshal error: %v", err,
+			)
+		}
+		item = sample
+	case "study":
+		var study SraStudy
+		err = json.Unmarshal([]byte(aux.Data), &study)
+		if err != nil {
+			return fmt.Errorf(
+				"[SraStudy] JSON Unmarshal error: %v", err,
+			)
+		}
+		item = study
+	case "submission":
+		var submission SraSubmission
+		err = json.Unmarshal([]byte(aux.Data), &submission)
+		if err != nil {
+			return fmt.Errorf(
+				"[SraSubmission] JSON Unmarshal error: %v", err,
+			)
+		}
+		item = submission
+	default:
+		return fmt.Errorf(
+			"Don't know how to parse sra item of type '%s'\n",
+			si.Type,
+		)
+	}
+
+	si.Data = item
+	return nil
 }
 
 func NewSraItemsFromXML(filename string, contents []byte) []*SraItem {
