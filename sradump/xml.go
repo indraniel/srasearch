@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 )
 
 func ProcessTarXMLs(
@@ -89,7 +90,10 @@ func processXML(
 			log.Fatal("Trouble encoding '%s' into json: %s\n",
 				name, err)
 		}
-		_, err = outPtr.Write(json)
+
+		line := strings.Join([]string{si.Id, string(json)}, ",")
+
+		_, err = outPtr.WriteString(line)
 		checkWrite(outPtr, err)
 		_, err = outPtr.Write([]byte("\n"))
 		checkWrite(outPtr, err)
