@@ -27,7 +27,7 @@ func CreateSearchIndex(input, output string) {
 	line, err := reader.ReadString('\n')
 
 	count := 0
-	batch := bleve.NewBatch()
+	batch := index.NewBatch()
 	startTime := time.Now()
 	batchCount := 0
 	for err == nil {
@@ -46,7 +46,7 @@ func CreateSearchIndex(input, output string) {
 				log.Fatal("Couldn't batch!")
 				//				return err
 			}
-			batch = bleve.NewBatch()
+			batch = index.NewBatch()
 			batchCount = 0
 		}
 		count++
