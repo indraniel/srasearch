@@ -14,10 +14,6 @@ import (
 
 func CreateSearchIndex(input, output string) {
 	batchSize := 100
-	log.Println(
-		"I'm in the CreateSearchIndex function!",
-		"Please implement me!",
-	)
 	f, gzf := utils.OpenGZFile(input)
 	defer utils.CloseGZFile(f, gzf)
 
