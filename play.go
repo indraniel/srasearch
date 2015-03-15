@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/indraniel/srasearch/sra"
 	"encoding/json"
 	"fmt"
 	"github.com/blevesearch/bleve"
@@ -80,6 +81,17 @@ func main() {
 
 		j2, _ := json.MarshalIndent(rv, "", "    ")
 		fmt.Printf("%s\n", j2)
+		fmt.Println("\n\n")
+		raw, err := index.GetInternal([]byte(id))
+		if err != nil {
+			log.Fatal("Trouble getting internal doc:", err)
+		}
+		fmt.Printf("%s\n", raw)
+		var si sra.SraItem
+		err = json.Unmarshal(raw, &si)
+		fmt.Println(si.Data)
+		fmt.Println("\n\n")
+		fmt.Println(si.Data.XMLString())
 		os.Exit(0)
 	}
 	fmt.Println(ids)
