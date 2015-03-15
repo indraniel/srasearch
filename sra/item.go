@@ -35,6 +35,12 @@ type SraItem struct {
 	Published    time.Time
 	Received     time.Time
 	Visibility   string
+	Experiment   string
+	Sample       string
+	Study        string
+	MD5          string
+	BioSample    string
+	BioProject   string
 	Data         Itemer
 }
 
@@ -52,6 +58,12 @@ func (si *SraItem) AddAttrFromAccessionRecords(
 		si.Published = data.Published
 		si.Received = data.Received
 		si.Visibility = data.Visibility
+		si.Experiment = data.Experiment
+		si.Sample = data.Sample
+		si.Study = data.Study
+		si.MD5 = data.MD5
+		si.BioSample = data.BioSample
+		si.BioProject = data.BioProject
 	}
 }
 
