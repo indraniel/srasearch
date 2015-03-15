@@ -48,6 +48,7 @@ func CreateSearchIndex(input, output string) {
 		json = strings.TrimRight(json, "\n")
 
 		batch.Index(docId, []byte(json))
+		batch.SetInternal([]byte(docId), []byte(json))
 		batchCount++
 
 		if batchCount >= batchSize {
