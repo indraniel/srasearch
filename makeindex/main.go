@@ -8,12 +8,24 @@ import (
 	"github.com/blevesearch/bleve"
 	"io"
 	"log"
+	"os"
 	"strings"
 	"time"
 )
 
 func CreateSearchIndex(input, output string) {
+	if _, err := os.Stat(output); err == nil {
+		log.Fatalf("Index: '%s' %s %s",
+			output,
+			"already exists!",
+			"Please move or delete it and try again.",
+		)
+	}
+
+	log.Print("Starting to make a brand new index")
+
 	batchSize := 100
+
 	f, gzf := utils.OpenGZFile(input)
 	defer utils.CloseGZFile(f, gzf)
 
