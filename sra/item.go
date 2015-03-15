@@ -78,6 +78,12 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		Updated      string
 		Published    string
 		Received     string
+		Experiment   string
+		Sample       string
+		Study        string
+		MD5          string
+		BioSample    string
+		BioProject   string
 		Data         json.RawMessage
 	}
 
@@ -92,6 +98,12 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 	si.Type = aux.Type
 	si.Status = aux.Status
 	si.Visibility = aux.Visibility
+	si.Experiment = aux.Experiment
+	si.Sample = aux.Sample
+	si.Study = aux.Study
+	si.MD5 = aux.MD5
+	si.BioSample = aux.BioSample
+	si.BioProject = aux.BioProject
 
 	t, err := time.Parse("2006-01-02T15:04:05Z", aux.Updated)
 	if err != nil {
