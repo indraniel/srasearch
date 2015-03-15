@@ -32,7 +32,7 @@ func CreateSearchIndex(input, output string) {
 	mapping := bleve.NewIndexMapping()
 	index, err := bleve.New(output, mapping)
 	if err != nil {
-		log.Fatal("Trouble making a bleve index!")
+		log.Fatalln("Trouble making a bleve index! :", err)
 	}
 
 	reader := bufio.NewReader(gzf)
