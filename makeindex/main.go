@@ -22,7 +22,7 @@ func CreateSearchIndex(input, output string) {
 		)
 	}
 
-	log.Print("Starting to make a brand new index")
+	log.Println("Starting to make a brand new index:", output)
 
 	batchSize := 100
 
