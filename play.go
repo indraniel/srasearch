@@ -12,7 +12,9 @@ import (
 )
 
 func main() {
-	index, err := bleve.Open("srasearch.idx")
+	//index, err := bleve.Open("srasearch.glb")
+	index, err := bleve.Open("srasearch.goleveldb.test.idx")
+	//	index, err := bleve.Open("srasearch2.idx")
 	if err != nil {
 		log.Fatalln("[1]", err)
 	}

@@ -26,11 +26,20 @@ func CreateSearchIndex(input, output string) {
 
 	batchSize := 100
 
+	kvstore := "goleveldb"
+	//kvstore := "boltdb"
+	kvconfig := map[string]interface{}{
+		"create_if_missing":         true,
+		"write_buffer_size":         536870912,
+		"lru_cache_capacity":        536870912,
+		"bloom_filter_bits_per_key": 10,
+	}
+
 	f, gzf := utils.OpenGZFile(input)
 	defer utils.CloseGZFile(f, gzf)
 
 	mapping := bleve.NewIndexMapping()
-	index, err := bleve.New(output, mapping)
+	index, err := bleve.NewUsing(output, mapping, kvstore, kvconfig)
 	if err != nil {
 		log.Fatalln("Trouble making a bleve index! :", err)
 	}
