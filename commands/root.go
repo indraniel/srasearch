@@ -28,4 +28,5 @@ func AddCommands() {
 	rootCmd.AddCommand(cmdSraDump)
 	rootCmd.AddCommand(cmdVersion)
 	rootCmd.AddCommand(cmdMakeIndex)
+	rootCmd.AddCommand(cmdMerge)
 }
