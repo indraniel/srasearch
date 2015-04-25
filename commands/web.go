@@ -52,7 +52,8 @@ func init() {
 }
 
 func (opts WebCmdOpts) main() {
-	web.Main(opts.Port, opts.Host, opts.IndexPath)
+	w := web.NewWeb(opts.Port, opts.Host, opts.IndexPath)
+	w.Main()
 }
 
 func (opts WebCmdOpts) processOpts() {
