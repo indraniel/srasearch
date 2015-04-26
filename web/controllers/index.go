@@ -18,7 +18,7 @@ func Home(c web.C, w http.ResponseWriter, r *http.Request) {
 
 	err := render.RenderHTML(w, templates, "base", data)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		render.RenderError(w, err, http.StatusInternalServerError)
 	}
 }
 
@@ -28,4 +28,9 @@ func Hello(c web.C, w http.ResponseWriter, r *http.Request) {
 
 func Accession(c web.C, w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Got accession: %s!", c.URLParams["id"])
+}
+
+func NotFound(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(404)
+	render.RenderNotFound(w, r)
 }
