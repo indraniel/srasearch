@@ -41,11 +41,11 @@ type SraItem struct {
 	MD5          string
 	BioSample    string
 	BioProject   string
-	Data         Itemer
+	XML          Itemer
 }
 
 func (si *SraItem) setId() {
-	accession := si.Data.GetAccession()
+	accession := si.XML.GetAccession()
 	si.Id = accession
 }
 
@@ -84,7 +84,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		MD5          string
 		BioSample    string
 		BioProject   string
-		Data         json.RawMessage
+		XML          json.RawMessage
 	}
 
 	dec := json.NewDecoder(bytes.NewReader(data))
@@ -142,7 +142,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 	switch si.Type {
 	case "analysis":
 		var analysis SraAnalysis
-		err = json.Unmarshal([]byte(aux.Data), &analysis)
+		err = json.Unmarshal([]byte(aux.XML), &analysis)
 		if err != nil {
 			return fmt.Errorf(
 				"[SraAnalysis] JSON Unmarshal error: %v", err,
@@ -151,7 +151,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		item = analysis
 	case "experiment":
 		var exp SraExp
-		err = json.Unmarshal([]byte(aux.Data), &exp)
+		err = json.Unmarshal([]byte(aux.XML), &exp)
 		if err != nil {
 			return fmt.Errorf(
 				"[SraExp] JSON Unmarshal error: %v", err,
@@ -160,7 +160,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		item = exp
 	case "run":
 		var run SraRun
-		err = json.Unmarshal([]byte(aux.Data), &run)
+		err = json.Unmarshal([]byte(aux.XML), &run)
 		if err != nil {
 			return fmt.Errorf(
 				"[SraRun] JSON Unmarshal error: %v", err,
@@ -169,7 +169,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		item = run
 	case "sample":
 		var sample SraSample
-		err = json.Unmarshal([]byte(aux.Data), &sample)
+		err = json.Unmarshal([]byte(aux.XML), &sample)
 		if err != nil {
 			return fmt.Errorf(
 				"[SraSample] JSON Unmarshal error: %v", err,
@@ -178,7 +178,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		item = sample
 	case "study":
 		var study SraStudy
-		err = json.Unmarshal([]byte(aux.Data), &study)
+		err = json.Unmarshal([]byte(aux.XML), &study)
 		if err != nil {
 			return fmt.Errorf(
 				"[SraStudy] JSON Unmarshal error: %v", err,
@@ -187,7 +187,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		item = study
 	case "submission":
 		var submission SraSubmission
-		err = json.Unmarshal([]byte(aux.Data), &submission)
+		err = json.Unmarshal([]byte(aux.XML), &submission)
 		if err != nil {
 			return fmt.Errorf(
 				"[SraSubmission] JSON Unmarshal error: %v", err,
@@ -201,7 +201,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		)
 	}
 
-	si.Data = item
+	si.XML = item
 	return nil
 }
 
@@ -217,7 +217,7 @@ func NewSraItemsFromXML(filename string, contents []byte) []*SraItem {
 			SubmissionId: id,
 			XMLFileName:  basename,
 			Type:         sraType,
-			Data:         item,
+			XML:          item,
 		}
 		si.setId()
 		sraItems = append(sraItems, si)

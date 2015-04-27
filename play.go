@@ -12,12 +12,18 @@ import (
 )
 
 func main() {
-	index, err := bleve.Open("srasearch.idx")
+	index, err := bleve.Open("srasearch0402.idx")
 	if err != nil {
 		log.Fatalln("[1]", err)
 	}
 
+	//query := bleve.NewQueryStringQuery("SRA003617") // works
+
 	query := bleve.NewQueryStringQuery("SubmissionId:SRA003617") // works
+
+	//	date := "2015-03-15"
+	//	query := bleve.NewDateRangeQuery(&date, nil)
+
 	//query := bleve.NewMatchQuery(`SubmissionId:"SRA003617"`)     // works
 	//query := bleve.NewMatchQuery("SRA003617") // works
 	//query := bleve.NewMatchQuery("WXS") // works
@@ -26,15 +32,28 @@ func main() {
 	//query := bleve.NewTermQuery("SubmissionId:SRA003617") // not work
 	search := bleve.NewSearchRequestOptions(query, 100, 0, false)
 	//search := bleve.NewSearchRequest(query)
-	search.Highlight = bleve.NewHighlightWithStyle("ansi")
-	//	search.Highlight.AddField("Data.Alias")
-	//	search.Fields = []string{"SubmissionId", "Published", "Data.Alias", "Data.Description"}
+
+	search.AddFacet("Types", bleve.NewFacetRequest("Type", 7))
+
+	//search.Highlight = bleve.NewHighlightWithStyle("ansi")
+	search.Highlight = bleve.NewHighlightWithStyle("html")
+	search.Highlight.AddField("XML.Alias")
+	search.Highlight.AddField("XML.Description")
+	search.Highlight.AddField("XML.SubmissionId")
+	search.Highlight.AddField("SubmissionId")
+	search.Highlight.AddField("Published")
+	search.Highlight.AddField("Type")
+	//	search.Fields = []string{"SubmissionId", "Published", "XML.Alias", "XML.Description"}
 	searchResults, err := index.Search(search)
 	if err != nil {
 		log.Fatalln("[2]", err)
 	}
 	//	jsonStr, _ := json.MarshalIndent(searchResults.Hits, "", "    ")
-	//	fmt.Printf("%s\n", jsonStr)
+	jsonStr, _ := json.MarshalIndent(searchResults, "", "    ")
+	fmt.Printf("%s\n", jsonStr)
+	fmt.Printf("\n\n-----------\n\n")
+	fmt.Println(searchResults)
+	fmt.Printf("\n\n-----------\n\n")
 	ids := make([]string, 0)
 	for _, val := range searchResults.Hits {
 		id := val.ID
@@ -89,9 +108,13 @@ func main() {
 		fmt.Printf("%s\n", raw)
 		var si sra.SraItem
 		err = json.Unmarshal(raw, &si)
-		fmt.Println(si.Data)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+		fmt.Println(si.XML)
 		fmt.Println("\n\n")
-		fmt.Println(si.Data.XMLString())
+		fmt.Println(si.XML.XMLString())
 		os.Exit(0)
 	}
 	fmt.Println(ids)
