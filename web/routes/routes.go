@@ -10,5 +10,6 @@ func Include() {
 	goji.Get("/", controllers.Home)
 	goji.Get("/hello/:name", controllers.Hello)
 	goji.Get("/accession/:id", controllers.Accession)
+	goji.Get("/example", controllers.Results)
 	goji.NotFound(controllers.NotFound)
 }
