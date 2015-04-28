@@ -8,6 +8,7 @@ import (
 
 func Include() {
 	goji.Get("/", controllers.Home)
+	goji.Get("/search", controllers.Search)
 	goji.Get("/hello/:name", controllers.Hello)
 	goji.Get("/accession/:id", controllers.Accession)
 	goji.Get("/example", controllers.Results)

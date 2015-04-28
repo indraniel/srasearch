@@ -10,11 +10,38 @@ import (
 )
 
 func Home(c web.C, w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	if _, exists := q["q"]; exists {
+		url := fmt.Sprintf("%s?%s", "/search", r.URL.RawQuery)
+		http.Redirect(w, r, url, http.StatusSeeOther)
+	}
+
 	templates := render.BaseTemplates()
 	templates = append(templates, "web/views/index.html")
 
 	data := make(map[string]string)
 	data["Title"] = "Home"
+
+	err := render.RenderHTML(w, templates, "base", data)
+	if err != nil {
+		render.RenderError(w, err, http.StatusInternalServerError)
+	}
+}
+
+func Search(c web.C, w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	term, exists := q["q"]
+	if exists == false {
+		url := "/"
+		http.Redirect(w, r, url, http.StatusCreated)
+	}
+
+	templates := render.BaseTemplates()
+	templates = append(templates, "web/views/search.html")
+
+	data := make(map[string]string)
+	data["Title"] = "Search"
+	data["Query"] = term[0]
 
 	err := render.RenderHTML(w, templates, "base", data)
 	if err != nil {
