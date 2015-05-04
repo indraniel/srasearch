@@ -6,6 +6,7 @@ import (
 
 	"github.com/zenazn/goji/web"
 
+	"github.com/indraniel/srasearch/searchdb"
 	"github.com/indraniel/srasearch/web/render"
 )
 
@@ -67,7 +68,25 @@ func Hello(c web.C, w http.ResponseWriter, r *http.Request) {
 }
 
 func Accession(c web.C, w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Got accession: %s!", c.URLParams["id"])
+	accession := c.URLParams["id"]
+
+	si, err := searchdb.GetSRAItem(accession)
+	if err != nil {
+		render.RenderError(w, err, http.StatusNotFound)
+		return
+	}
+
+	templates := render.BaseTemplates()
+	templates = append(templates, "web/views/accession.html")
+
+	data := make(map[string]interface{})
+	data["Title"] = fmt.Sprintf("%s : %s", "Accession", accession)
+	data["SRAItem"] = si
+
+	err = render.RenderHTML(w, templates, "base", data)
+	if err != nil {
+		render.RenderError(w, err, http.StatusInternalServerError)
+	}
 }
 
 func NotFound(c web.C, w http.ResponseWriter, r *http.Request) {

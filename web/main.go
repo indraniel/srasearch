@@ -11,6 +11,7 @@ import (
 	"github.com/zenazn/goji/bind"
 	"github.com/zenazn/goji/graceful"
 
+	"github.com/indraniel/srasearch/searchdb"
 	"github.com/indraniel/srasearch/web/routes"
 )
 
@@ -29,6 +30,15 @@ func NewWeb(port int, host, idxPath string) *Web {
 }
 
 func (w Web) Main() {
+	// Setup Search Database
+	if err := searchdb.Init(w.IndexPath); err != nil {
+		log.Fatalf(
+			"Couldn't open Bleve Index Path: %s : %s",
+			w.IndexPath,
+			err,
+		)
+	}
+
 	// Static files setup
 	goji.Use(
 		gojistatic.Static(

@@ -1,0 +1,133 @@
+{{define "body"}}
+    <div class="starter-template">
+    <ol class="breadcrumb">
+    	<li><a href="#">Accession</a></li>
+        <li><a href="#">{{.SRAItem.Id}}</a></li>
+		<li class="pull-right"><a href="" class="text-muted"><i class="fa fa-refresh"></i></a></li>
+	</ol>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    		<div class="well search-result">
+        		<div class="input-group">
+        		<input type="text" class="form-control" placeholder="Search">
+			      <span class="input-group-btn">
+			        <button class="btn btn-info btn-default" type="button">
+                        <i class="glyphicon glyphicon-search"></i>
+                        Search
+                    </button>
+			      </span>
+			    </div>
+        	</div>
+            <div class="well search-result">
+            	<div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-leftheading">
+                            <h3 class="panel-lefttitle">{{.SRAItem.Id}} &nbsp;  ({{.SRAItem.Type}})</h3>
+                        </div>
+                        <div class="panel-rightbody text-left">
+                            <h3 class="section-header">Timestamps</h3>
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <th class="table-header col-md-6 col-lg-6">Attribute</th>
+                                    <th class="table-header col-md-6 col-lg-6">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Received</th>
+                                    <td>{{.SRAItem.Received.Format "2006-01-02 15:04:05"}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Published</th>
+                                    <td>{{.SRAItem.Published.Format "2006-01-02 15:04:05"}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Updated</th>
+                                    <td>{{.SRAItem.Updated.Format "2006-01-02 15:04:05"}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <h3 class="section-header">Status &amp; Placement</h3>
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <th class="table-header col-md-6 col-lg-6">Attribute</th>
+                                    <th class="table-header col-md-6 col-lg-6">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Status</th>
+                                    <td>{{.SRAItem.Status}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Visibility</th>
+                                    <td>{{.SRAItem.Visibility}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <h3 class="section-header">Hierarchy</h3>
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <th class="table-header col-md-6 col-lg-6">Attribute</th>
+                                    <th class="table-header col-md-6 col-lg-6">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Study</th>
+                                    <td>{{.SRAItem.Study}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">BioProject</th>
+                                    <td>{{.SRAItem.BioProject}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Sample</th>
+                                    <td>{{.SRAItem.Sample}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">BioSample</th>
+                                    <td>{{.SRAItem.BioSample}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Experiment</th>
+                                    <td>{{.SRAItem.Experiment}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <h3 class="section-header">XML</h3>
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <th class="table-header col-md-6 col-lg-6">Attribute</th>
+                                    <th class="table-header col-md-6 col-lg-6">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">File Name</th>
+                                    <td>{{.SRAItem.XMLFileName}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">MD5</th>
+                                    <td>{{.SRAItem.MD5}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <pre>
+
+                            {{ .SRAItem.XML.XMLString }}
+
+                            </pre>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                    </div>
+            	</div>
+            </div>
+        </div>
+    </div>
+{{end}}
