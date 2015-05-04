@@ -10,6 +10,10 @@ body {
 .top-buffer { margin-top:20px; }
 .bottom-buffer { margin-bottom:20px; }
 
+.breadcrumb {
+    font-size: 20px;
+}
+
 .search-result .title h3 {
     margin: 0 0 15px;
     color: #333;
