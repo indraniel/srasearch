@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/zenazn/goji/web"
 
@@ -37,14 +39,27 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, url, http.StatusCreated)
 	}
 
+	pageNum := 1
+	if page, ok := q["page"]; ok {
+		pageNum, _ = strconv.Atoi(page[0])
+	}
+
+	searchResults, err := searchdb.Query(term[0], pageNum)
+	if err != nil {
+		render.RenderError(w, err, http.StatusInternalServerError)
+		return
+	}
+	jsonStr, _ := json.MarshalIndent(searchResults, "", "    ")
+
 	templates := render.BaseTemplates()
 	templates = append(templates, "web/views/search.html")
 
 	data := make(map[string]string)
 	data["Title"] = "Search"
 	data["Query"] = term[0]
+	data["JsonStr"] = string(jsonStr)
 
-	err := render.RenderHTML(w, templates, "base", data)
+	err = render.RenderHTML(w, templates, "base", data)
 	if err != nil {
 		render.RenderError(w, err, http.StatusInternalServerError)
 	}
