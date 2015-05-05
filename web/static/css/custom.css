@@ -47,6 +47,10 @@ body {
     position: relative;
 } 
 
+.left-align {
+    text-align: left;
+}
+
 .ul .block {
   margin: 48px -395px;
 }
