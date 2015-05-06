@@ -45,7 +45,7 @@ func Query(qryString string, page int) (*bleve.SearchResult, error) {
 	from := (page - 1) * querySize
 
 	search := bleve.NewSearchRequestOptions(query, querySize, from, false)
-	//	search.Fields = []string{"*"}
+	search.Fields = []string{"*"}
 	search.AddFacet("Types", bleve.NewFacetRequest("Type", 7))
 	search.Highlight = bleve.NewHighlightWithStyle("html")
 	search.Highlight.AddField("XML.Alias")
