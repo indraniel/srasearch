@@ -11,7 +11,7 @@ func RenderHTML(
 	templates []string,
 	name string,
 	data interface{}) error {
-	t := template.New(name)
+	t := template.New(name).Funcs(funcMap)
 
 	t, err := t.ParseFiles(templates...)
 	if err != nil {
