@@ -54,10 +54,11 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	templates := render.BaseTemplates()
 	templates = append(templates, "web/views/search.html")
 
-	data := make(map[string]string)
+	data := make(map[string]interface{})
 	data["Title"] = "Search"
 	data["Query"] = term[0]
 	data["JsonStr"] = string(jsonStr)
+	data["searchResults"] = searchResults
 
 	err = render.RenderHTML(w, templates, "base", data)
 	if err != nil {
