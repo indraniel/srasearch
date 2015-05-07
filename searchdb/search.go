@@ -47,13 +47,13 @@ func Query(qryString string, page int) (*bleve.SearchResult, error) {
 	search := bleve.NewSearchRequestOptions(query, querySize, from, false)
 	search.Fields = []string{"*"}
 	search.AddFacet("Types", bleve.NewFacetRequest("Type", 7))
-	search.Highlight = bleve.NewHighlightWithStyle("html")
-	search.Highlight.AddField("XML.Alias")
-	search.Highlight.AddField("XML.Description")
-	search.Highlight.AddField("XML.SubmissionId")
-	search.Highlight.AddField("SubmissionId")
-	search.Highlight.AddField("Published")
-	search.Highlight.AddField("Type")
+	//	search.Highlight = bleve.NewHighlightWithStyle("html")
+	//	search.Highlight.AddField("XML.Alias")
+	//	search.Highlight.AddField("XML.Description")
+	//	search.Highlight.AddField("XML.SubmissionId")
+	//	search.Highlight.AddField("SubmissionId")
+	//	search.Highlight.AddField("Published")
+	//	search.Highlight.AddField("Type")
 
 	searchResults, err := index.Search(search)
 	return searchResults, err
