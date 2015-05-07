@@ -15,7 +15,7 @@ body {
 }
 
 .search-result .title h3 {
-    margin: 0 0 15px;
+    margin: 0 60px 15px;
     color: #333;
 }
 .search-result .title p {
@@ -67,17 +67,19 @@ body {
     text-align: left;
 }
 
-.ul .block {
-  margin: 48px -395px;
+.block {
+  margin: 48px 0px;
+  padding: 0 0 0 20px;
 }
+
 .block-half {
   margin: 24px 0;
 }
 .submission {
   display: inline-block;
   height: 65px;
-  width: 68%;
-  margin: 0 1.5%;
+  width: 85px;
+  margin: 0 25.5%;
   font-family: 'pt_sansbold', Helvetica, sans-serif;
 }
 .submission .label {
