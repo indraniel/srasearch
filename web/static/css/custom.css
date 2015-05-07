@@ -67,6 +67,18 @@ body {
     text-align: left;
 }
 
+.right-align {
+    text-align: right;
+}
+
+.center-align {
+    text-align: center;
+}
+
+.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+    border: none;
+}
+
 .block {
   margin: 48px 0px;
   padding: 0 0 0 20px;
