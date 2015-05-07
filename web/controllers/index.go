@@ -34,9 +34,9 @@ func Home(c web.C, w http.ResponseWriter, r *http.Request) {
 func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	term, exists := q["q"]
-	if exists == false {
+	if exists == false || term[0] == "" {
 		url := "/"
-		http.Redirect(w, r, url, http.StatusCreated)
+		http.Redirect(w, r, url, http.StatusSeeOther)
 	}
 
 	pageNum := 1
