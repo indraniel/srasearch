@@ -10,6 +10,12 @@ body {
 .top-buffer { margin-top:20px; }
 .bottom-buffer { margin-bottom:20px; }
 
+.condensed-row {
+    margin-left: -15px;
+    margin-top: -6%;
+    margin-bottom: -5%;
+}
+
 .breadcrumb {
     font-size: 20px;
 }

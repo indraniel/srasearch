@@ -58,6 +58,30 @@
                     </div>
                 </div>
                 <div class="well search-result">
+                    <div class="condensed-row center-align">
+                        <nav>
+                            <ul class="pagination">
+                                {{ if .pagination.HasPrev }}
+                                        <li><a href="#">prev</a></li>
+                                {{ end }}
+                                {{ $pagination := .pagination }}
+                                {{ $Query := .Query }}
+                                {{ range $page := .pagination.IterationSet }}
+                                    {{ if eq $.pagination.Page $page }}
+                                    <li class="active"><a href="#">{{ $page }}</a></li>
+                                    {{ else if $page }}
+                                        <li><a href="/search?q={{$.Query}}&page={{ $page }}">{{ $page }}</a></li>
+                                    {{ else }}
+                                    <li class="disabled"><a href="#">...</a></li>
+                                    {{ end }}
+                                {{ end }}
+                                {{ if .pagination.HasNext }}
+                                <li><a href="/search?q={{.Query}}&page={{add .pagination.Page 1}}">next</a></li>
+                                {{ end }}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
                 {{ if .Debug }}
                 <div class="well search-result">
                     <div class="row">
