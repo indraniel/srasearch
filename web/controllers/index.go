@@ -23,7 +23,7 @@ func Home(c web.C, w http.ResponseWriter, r *http.Request) {
 	templates = append(templates, "web/views/index.html")
 
 	data := make(map[string]string)
-	data["Title"] = "Home"
+	data["Title"] = "Beaker: A NCBI SRA Search Assistant"
 
 	err := render.RenderHTML(w, templates, "base", data)
 	if err != nil {
@@ -59,7 +59,7 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	templates = append(templates, "web/views/search.html")
 
 	data := make(map[string]interface{})
-	data["Title"] = "Search"
+	data["Title"] = "Beaker Search"
 	data["Query"] = term[0]
 	data["JsonStr"] = string(jsonStr)
 	data["searchResults"] = searchResults
