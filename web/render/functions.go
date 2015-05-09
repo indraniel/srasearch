@@ -2,7 +2,6 @@ package render
 
 import (
 	"html/template"
-	"strings"
 	"time"
 )
 
@@ -20,6 +19,35 @@ func init() {
 	}
 }
 
+func PluralType(member string) string {
+	plural := member
+	switch {
+	case member == "study":
+		plural = "Studies"
+	case member == "sample":
+		plural = "Samples"
+	case member == "experiment":
+		plural = "Experiments"
+	case member == "run":
+		plural = "Runs"
+	case member == "analysis":
+		plural = "Analyses"
+	case member == "submission":
+		plural = "Submissions"
+	}
+	return plural
+}
+
+func MinUint64(args ...uint64) uint64 {
+	var min uint64 = 100000000
+	for _, v := range args {
+		if v < min {
+			min = v
+		}
+	}
+	return min
+}
+
 func Add(args ...int) int {
 	total := 0
 	for _, v := range args {
@@ -29,8 +57,22 @@ func Add(args ...int) int {
 }
 
 func ShortType(member string) string {
-	abbrev := member[0:2]
-	return strings.Title(abbrev)
+	abbrev := "-"
+	switch {
+	case member == "study":
+		abbrev = "St"
+	case member == "sample":
+		abbrev = "Sa"
+	case member == "experiment":
+		abbrev = "E"
+	case member == "run":
+		abbrev = "R"
+	case member == "analysis":
+		abbrev = "A"
+	case member == "submission":
+		abbrev = "Su"
+	}
+	return abbrev
 }
 
 func TimeFmt(ts, fmt string) string {

@@ -48,7 +48,7 @@
                             {{ range .searchResults.Facets }}
                                 {{ range .Terms }}
                                 <tr>
-                                    <th scope="row">{{.Term}}</th>
+                                    <th scope="row">{{pluralType .Term}}</th>
                                     <td class="right-align">{{.Count}}</td>
                                 </tr>
                                 {{ end }}
