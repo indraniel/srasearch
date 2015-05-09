@@ -55,5 +55,12 @@ func Query(qryString string, page, querySize int) (*bleve.SearchResult, error) {
 	//	search.Highlight.AddField("Type")
 
 	searchResults, err := index.Search(search)
+	if err == nil && (len(searchResults.Hits) == 0 && page != 1) {
+		e := fmt.Errorf(
+			"Page %d is is out of bounds on search request",
+			page,
+		)
+		return nil, e
+	}
 	return searchResults, err
 }
