@@ -39,17 +39,21 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, url, http.StatusSeeOther)
 	}
 
+	// default query size
+	querySize := 25
+
 	pageNum := 1
 	if page, ok := q["page"]; ok {
 		pageNum, _ = strconv.Atoi(page[0])
 	}
 
-	searchResults, err := searchdb.Query(term[0], pageNum)
+	searchResults, err := searchdb.Query(term[0], pageNum, querySize)
 	if err != nil {
 		render.RenderError(w, err, http.StatusInternalServerError)
 		return
 	}
 	jsonStr, _ := json.MarshalIndent(searchResults, "", "    ")
+	pagination := NewPagination(pageNum, querySize, int(searchResults.Total))
 
 	templates := render.BaseTemplates()
 	templates = append(templates, "web/views/search.html")
@@ -59,6 +63,7 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	data["Query"] = term[0]
 	data["JsonStr"] = string(jsonStr)
 	data["searchResults"] = searchResults
+	data["pagination"] = pagination
 
 	err = render.RenderHTML(w, templates, "base", data)
 	if err != nil {

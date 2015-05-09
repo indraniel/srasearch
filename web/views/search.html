@@ -2,7 +2,7 @@
     <div class="starter-template">
     <ol class="breadcrumb">
     	<li><a href="#">Search</a></li>
-        <li><a href="#">Page 1</a></li>
+        <li><a href="#">Page {{ .pagination.Page }}</a></li>
 		<li class="pull-right"><a href="" class="text-muted"><i class="fa fa-refresh"></i></a></li>
 	</ol>
 	<div class="row">
@@ -95,10 +95,28 @@
                     </div>
                 </div>
                 {{ end }}
-                <div class="row">
-                    <button type="button" class="btn btn-info  btn-block">
-                        <i class="glyphicon glyphicon-refresh"></i>Load more...
-                    </button>
+                <div class="row center-align">
+                    <nav>
+                        <ul class="pagination">
+                            {{ if .pagination.HasPrev }}
+                                    <li><a href="#">prev</a></li>
+                            {{ end }}
+                            {{ $pagination := .pagination }}
+                            {{ $Query := .Query }}
+                            {{ range $page := .pagination.IterationSet }}
+                                {{ if eq $.pagination.Page $page }}
+                                <li class="active"><a href="#">{{ $page }}</a></li>
+                                {{ else if $page }}
+                                    <li><a href="/search?q={{$.Query}}&page={{ $page }}">{{ $page }}</a></li>
+                                {{ else }}
+                                <li class="disabled"><a href="#">...</a></li>
+                                {{ end }}
+                            {{ end }}
+                            {{ if .pagination.HasNext }}
+                            <li><a href="/search?q={{.Query}}&page={{add .pagination.Page 1}}">next</a></li>
+                            {{ end }}
+                        </ul>
+                    </nav>
                 </div>
             </div>
     </div>
