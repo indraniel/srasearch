@@ -57,6 +57,7 @@
                         </table>
                     </div>
                 </div>
+                {{ if .searchResults.Total }}
                 <div class="well search-result">
                     <div class="condensed-row center-align">
                         <nav>
@@ -82,6 +83,8 @@
                         </nav>
                     </div>
                 </div>
+                {{ end }}
+
                 {{ if .Debug }}
                 <div class="well search-result">
                     <div class="row">
