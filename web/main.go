@@ -12,17 +12,20 @@ import (
 	"github.com/zenazn/goji/graceful"
 
 	"github.com/indraniel/srasearch/searchdb"
+	"github.com/indraniel/srasearch/web/controllers"
 	"github.com/indraniel/srasearch/web/routes"
 )
 
 type Web struct {
+	Debug     bool
 	IndexPath string
 	Host      string
 	Port      int
 }
 
-func NewWeb(port int, host, idxPath string) *Web {
+func NewWeb(port int, host, idxPath string, debug bool) *Web {
 	return &Web{
+		Debug:     debug,
 		IndexPath: idxPath,
 		Host:      host,
 		Port:      port,
@@ -49,6 +52,9 @@ func (w Web) Main() {
 
 	// Add routes
 	routes.Include()
+
+	// Controller Settings
+	controllers.Init(w.Debug)
 
 	// Run Goji
 	w.Serve()

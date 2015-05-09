@@ -12,6 +12,12 @@ import (
 	"github.com/indraniel/srasearch/web/render"
 )
 
+var Debug bool
+
+func Init(debug bool) {
+	Debug = debug
+}
+
 func Home(c web.C, w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	if _, exists := q["q"]; exists {
@@ -64,6 +70,7 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	data["JsonStr"] = string(jsonStr)
 	data["searchResults"] = searchResults
 	data["pagination"] = pagination
+	data["Debug"] = Debug
 
 	err = render.RenderHTML(w, templates, "base", data)
 	if err != nil {

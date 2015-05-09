@@ -58,12 +58,13 @@
                     </div>
                 </div>
                 <div class="well search-result">
+                {{ if .Debug }}
+                <div class="well search-result">
                     <div class="row">
-                        <pre>
-                        {{.JsonStr}}
-                        </pre>
+                        <pre>{{.JsonStr}}</pre>
                     </div>
                 </div>
+                {{ end }}
                 {{ range .searchResults.Hits }}
                 <div class="well search-result">
                     <div class="row">

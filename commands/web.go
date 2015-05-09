@@ -11,6 +11,7 @@ type WebCmdOpts struct {
 	Port      int
 	Host      string
 	IndexPath string
+	Debug     bool
 }
 
 var WebOpts WebCmdOpts
@@ -49,10 +50,18 @@ func init() {
 		"",
 		"path to the bleve index dir",
 	)
+
+	cmdWeb.Flags().BoolVarP(
+		&WebOpts.Debug,
+		"debug",
+		"d",
+		false,
+		"enable debug mode on the web interface",
+	)
 }
 
 func (opts WebCmdOpts) main() {
-	w := web.NewWeb(opts.Port, opts.Host, opts.IndexPath)
+	w := web.NewWeb(opts.Port, opts.Host, opts.IndexPath, opts.Debug)
 	w.Main()
 }
 
