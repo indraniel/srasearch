@@ -233,7 +233,7 @@ body {
     -o-transform-origin: left top;
     transform: rotate(90deg);
     transform-origin: left top;
-    position: absolute;
+    position: fixed;
     white-space: nowrap;
 }
 
