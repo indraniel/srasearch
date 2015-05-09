@@ -92,31 +92,33 @@
                     </div>
                 </div>
                 {{ end }}
-                {{ range .searchResults.Hits }}
+                {{ $pagination := .pagination }}
+                {{ range $index, $elem := .searchResults.Hits }}
                 <div class="well search-result">
                     <div class="row">
                         <a href="#">
                             <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
                                 <ul class="block">
                                     <li class="submission {{.Fields.Type}}">
-                                    <div class="submission-block">{{shortType .Fields.Type}}</div>
-                                        <div class="label">{{.Fields.Type}}</div>
+                                        <div class="label">{{ incrementIdx $index $pagination.StartIndex}}</div>
+                                        <div class="submission-block">{{shortType $elem.Fields.Type}}</div>
+                                        <div class="label">{{$elem.Fields.Type}}</div>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9 title">
-                                <h3><a href="/accession/{{.ID}}">{{ .ID }}</a></h3>
+                                <h3><a href="/accession/{{.ID}}">{{ $elem.ID }}</a></h3>
                                 <dl class="dl-horizontal">
                                     <dt>Alias</dt>
-                                    <dd>{{ mapGet .Fields "XML.Alias" }}</dt>
+                                    <dd>{{ mapGet $elem.Fields "XML.Alias" }}</dt>
                                     <dt>Submission ID</dt>
-                                    <dd>{{ mapGet .Fields "SubmissionId" }}</dt>
+                                    <dd>{{ mapGet $elem.Fields "SubmissionId" }}</dt>
                                     <dt>Receive Date</dt>
-                                    <dd>{{ timeFmt .Fields.Received "2006-01-02 15:04:05"}}</dt>
+                                    <dd>{{ timeFmt $elem.Fields.Received "2006-01-02 15:04:05"}}</dt>
                                     <dt>Visibility</dt>
-                                    <dd>{{ mapGet .Fields "Visibility"}}</dt>
+                                    <dd>{{ mapGet $elem.Fields "Visibility"}}</dt>
                                     <dt>Description</dt>
-                                    <dd>{{ mapGet .Fields "XML.Description" }}</dt>
+                                    <dd>{{ mapGet $elem.Fields "XML.Description" }}</dt>
                                 </dl>
                             </div>
                         </a>

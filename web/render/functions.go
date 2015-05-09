@@ -9,14 +9,20 @@ var funcMap template.FuncMap
 
 func init() {
 	funcMap = template.FuncMap{
-		"add":        Add,
-		"mapGet":     MapGet,
-		"timeFmt":    TimeFmt,
-		"safeHTML":   SafeHTML,
-		"shortType":  ShortType,
-		"minUint64":  MinUint64,
-		"pluralType": PluralType,
+		"add":          Add,
+		"mapGet":       MapGet,
+		"timeFmt":      TimeFmt,
+		"safeHTML":     SafeHTML,
+		"incrementIdx": IncrementIndex,
+		"shortType":    ShortType,
+		"minUint64":    MinUint64,
+		"pluralType":   PluralType,
 	}
+}
+
+func IncrementIndex(counter int, index uint64) int {
+	val := counter + int(index)
+	return val
 }
 
 func PluralType(member string) string {
