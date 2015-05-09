@@ -57,3 +57,14 @@ func (p *Pagination) IterationSet() []int {
 
 	return set
 }
+
+// StartIndex and EndIndex are 1-based
+func (p *Pagination) StartIndex() uint64 {
+	index := uint64((p.Page - 1) * p.PerPage)
+	return index + 1
+}
+
+func (p *Pagination) EndIndex() uint64 {
+	index := p.StartIndex() + uint64(p.PerPage)
+	return index - 1
+}

@@ -39,8 +39,8 @@
                             </tr>
                             <tr>
                                 <th scope="row">Result Slice</th>
-                                <td class="right-align">{{.searchResults.Request.From}} -
-                                    {{add .searchResults.Request.From .searchResults.Request.Size}}</td>
+                                <td class="right-align">{{.pagination.StartIndex}} -
+                                    {{minUint64 .pagination.EndIndex .searchResults.Total}}</td>
                             </tr>
                             <tr>
                                 <th colspan=2 class="table-header center-align col-md-6 col-lg-6">Groupings</th>

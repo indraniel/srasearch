@@ -10,11 +10,13 @@ var funcMap template.FuncMap
 
 func init() {
 	funcMap = template.FuncMap{
-		"safeHTML":  SafeHTML,
-		"mapGet":    MapGet,
-		"timeFmt":   TimeFmt,
-		"shortType": ShortType,
-		"add":       Add,
+		"add":        Add,
+		"mapGet":     MapGet,
+		"timeFmt":    TimeFmt,
+		"safeHTML":   SafeHTML,
+		"shortType":  ShortType,
+		"minUint64":  MinUint64,
+		"pluralType": PluralType,
 	}
 }
 
