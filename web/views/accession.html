@@ -2,7 +2,7 @@
     <div class="starter-template">
     <ol class="breadcrumb">
     	<li><a href="#">Accession</a></li>
-        <li><a href="#">{{.SRAItem.Id}}</a></li>
+        <li><a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Id}}">{{.SRAItem.Id}}</a></li>
 		<li class="pull-right"><a href="" class="text-muted"><i class="fa fa-refresh"></i></a></li>
 	</ol>
 	<div class="row">
@@ -57,28 +57,56 @@
                                 </tr>
                             </tbody>
                             </table>
-                            <h3 class="section-header">Hierarchy</h3>
+                            <h3 class="section-header">Relationships</h3>
                             <table class="table table-hover table-condensed">
                             <tbody>
                                 <tr>
+                                    <th scope="row">Submission</th>
+                                    {{ if eq .SRAItem.SubmissionId "-" }}
+                                    <td>{{.SRAItem.SubmissionId}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.SubmissionId}}">{{.SRAItem.SubmissionId}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.SubmissionId}}">NCBI</a></td>
+                                    {{ end }}
+                                </tr>
+                                <tr>
                                     <th scope="row">Study</th>
+                                    {{ if eq .SRAItem.Study "-" }}
                                     <td>{{.SRAItem.Study}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.Study}}">{{.SRAItem.Study}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Study}}">NCBI</a></td>
+                                    {{ end }}
                                 </tr>
                                 <tr>
                                     <th scope="row">BioProject</th>
+                                    {{ if eq .SRAItem.BioProject "-" }}
                                     <td>{{.SRAItem.BioProject}}</td>
+                                    {{ else }}
+                                    <td><a href="http://www.ncbi.nlm.nih.gov/bioproject/{{.SRAItem.BioProject}}">{{.SRAItem.BioProject}}</a></td>
+                                    {{ end }}
                                 </tr>
                                 <tr>
                                     <th scope="row">Sample</th>
+                                    {{ if eq .SRAItem.Sample "-" }}
                                     <td>{{.SRAItem.Sample}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.Sample}}">{{.SRAItem.Sample}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Sample}}">NCBI</a></td>
+                                    {{ end }}
                                 </tr>
                                 <tr>
                                     <th scope="row">BioSample</th>
+                                    {{ if eq .SRAItem.BioSample "-" }}
                                     <td>{{.SRAItem.BioSample}}</td>
+                                    {{ else }}
+                                    <td><a href="http://www.ncbi.nlm.nih.gov/biosample/{{.SRAItem.BioSample}}">{{.SRAItem.BioSample}}</a></td>
+                                    {{ end }}
                                 </tr>
                                 <tr>
                                     <th scope="row">Experiment</th>
+                                    {{ if eq .SRAItem.Experiment "-" }}
                                     <td>{{.SRAItem.Experiment}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.Experiment}}">{{.SRAItem.Experiment}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Experiment}}">NCBI</a></td>
+                                    {{ end }}
                                 </tr>
                             </tbody>
                             </table>
