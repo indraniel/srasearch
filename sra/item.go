@@ -41,6 +41,7 @@ type SraItem struct {
 	MD5          string
 	BioSample    string
 	BioProject   string
+	Alias        string
 	XML          Itemer
 }
 
@@ -64,6 +65,7 @@ func (si *SraItem) AddAttrFromAccessionRecords(
 		si.MD5 = data.MD5
 		si.BioSample = data.BioSample
 		si.BioProject = data.BioProject
+		si.Alias = data.Alias
 	}
 }
 
@@ -84,6 +86,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		MD5          string
 		BioSample    string
 		BioProject   string
+		Alias        string
 		XML          json.RawMessage
 	}
 
@@ -104,6 +107,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 	si.MD5 = aux.MD5
 	si.BioSample = aux.BioSample
 	si.BioProject = aux.BioProject
+	si.Alias = aux.Alias
 
 	t, err := time.Parse("2006-01-02T15:04:05Z", aux.Updated)
 	if err != nil {

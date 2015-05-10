@@ -99,6 +99,7 @@ func CollectAccessionStats(tarfile string) (
 			Published:  publishedTime,
 			Received:   receivedTime,
 			Visibility: record[8],
+			Alias:      record[9],
 			Experiment: record[10],
 			Sample:     record[11],
 			Study:      record[13],

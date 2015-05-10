@@ -17,6 +17,7 @@ type AccessionRecord struct {
 	MD5        string
 	BioSample  string
 	BioProject string
+	Alias      string
 }
 
 func (ar AccessionRecord) String() string {
@@ -38,7 +39,8 @@ func (ar AccessionRecord) String() string {
 	md5 := fmt.Sprintf("MD5        : %s\n", ar.MD5)
 	biosample := fmt.Sprintf("BioSample  : %s\n", ar.BioSample)
 	bioproject := fmt.Sprintf("BioProject : %s\n", ar.BioProject)
+	alias := fmt.Sprintf("Alias      : %s\n", ar.Alias)
 
-	return status + updated + published + received + visibility +
+	return alias + status + updated + published + received + visibility +
 		study + bioproject + sample + biosample + experiment + md5
 }
