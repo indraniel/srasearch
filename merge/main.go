@@ -104,7 +104,7 @@ func CollectAccessionStats(tarfile string) (
 			Alias:      record[9],
 			Experiment: record[10],
 			Sample:     record[11],
-			Study:      record[13],
+			Study:      record[12],
 			MD5:        record[16],
 			BioSample:  record[17],
 			BioProject: record[18],
