@@ -2,44 +2,50 @@ package commands
 
 import (
 	"github.com/indraniel/srasearch/merge"
+	"github.com/indraniel/srasearch/utils"
 	"github.com/spf13/cobra"
 	"log"
-	"os"
 )
 
 type MergeCmdOpts struct {
-	inputTar  string
-	inputDump string
-	output    string
+	inputMetaData string
+	inputUploads  string
+	inputDump     string
+	output        string
 }
 
 var MergeOpts MergeCmdOpts
 
 var cmdMerge = &cobra.Command{
-	Use:   "merge -d <old-sra-dump.sjd.gz> -t <sra-incremental.tar.gz> -o <output.sjd.gz>",
+	Use:   "merge -d <old-sra-dump.sjd.gz> -m <sra-incremental.tar.gz> -u <sra-incremental-uploads.gz> -o <output.sjd.gz>",
 	Short: "Merge NCBI Batch Telemetry tar incrementals to a SRA Dump",
 	Long: `This command merges the raw incremental NCBI Batch Telemetry
          tar file contents into an existing SRA Dump`,
 	Run: func(cmd *cobra.Command, args []string) {
-		MergeOpts.processOpts()
-		checkFileExists(MergeOpts.inputTar)
-		checkFileExists(MergeOpts.inputDump)
-		MergeOpts.mainRun()
+		MergeOpts.main()
 	},
 }
 
 func init() {
 	cmdMerge.Flags().StringVarP(
-		&MergeOpts.inputTar,
-		"input-tar",
-		"t",
+		&MergeOpts.inputMetaData,
+		"ncbi-metadata",
+		"m",
 		"",
-		"the incremental SRA tar file",
+		"the incremental SRA tar.gz file",
+	)
+
+	cmdMerge.Flags().StringVarP(
+		&MergeOpts.inputUploads,
+		"ncbi-uploads",
+		"u",
+		"",
+		"the incremental SRA gzipped uploads file",
 	)
 
 	cmdMerge.Flags().StringVarP(
 		&MergeOpts.inputDump,
-		"input-dump",
+		"dump",
 		"d",
 		"sradump.sjd.gz",
 		"the existing SRA dump file to merge into",
@@ -54,8 +60,11 @@ func init() {
 	)
 }
 
-func (opts MergeCmdOpts) mainRun() {
-	merge.RunMerge(opts.inputTar, opts.inputDump, opts.output)
+func (opts MergeCmdOpts) main() {
+	opts.processOpts()
+	utils.CheckFileExists(opts.inputMetaData)
+	utils.CheckFileExists(opts.inputDump)
+	merge.RunMerge(opts.inputMetaData, opts.inputUploads, opts.inputDump, opts.output)
 }
 
 func (opts MergeCmdOpts) processOpts() {
@@ -66,10 +75,17 @@ func (opts MergeCmdOpts) processOpts() {
 		)
 	}
 
-	if opts.inputTar == "" {
+	if opts.inputMetaData == "" {
 		log.Fatal(
-			"Please supply an incremental input tar file ",
-			"to via --input-tar !",
+			"Please supply a NCBI incremental input tar file ",
+			"to via --ncbi-metadata !",
+		)
+	}
+
+	if opts.inputUploads == "" {
+		log.Fatal(
+			"Please supply a NCBI incremental input uploads file ",
+			"to via --ncbi-uploads !",
 		)
 	}
 
@@ -77,15 +93,6 @@ func (opts MergeCmdOpts) processOpts() {
 		log.Fatal(
 			"Please supply an existing SRA Dump file ",
 			"to merge against via --input-dump !",
-		)
-	}
-}
-
-func checkFileExists(file string) {
-	if _, err := os.Stat(file); os.IsNotExist(err) {
-		log.Fatalf(
-			"Could not find '%s' on file system: %s",
-			file, err,
 		)
 	}
 }
