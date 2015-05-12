@@ -38,8 +38,10 @@ func GetSRAItem(id string) (*sra.SraItem, error) {
 	return si, nil
 }
 
-func Query(qryString string, page, querySize int) (*bleve.SearchResult, error) {
-	query := bleve.NewQueryStringQuery(qryString)
+func Query(qryString, start, end string, page, querySize int) (*bleve.SearchResult, error) {
+	inputQuery := bleve.NewQueryStringQuery(qryString)
+	tsQuery := bleve.NewDateRangeQuery(&start, &end)
+	query := bleve.NewConjunctionQuery([]bleve.Query{inputQuery, tsQuery})
 
 	from := (page - 1) * querySize
 

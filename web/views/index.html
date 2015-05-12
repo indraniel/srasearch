@@ -6,6 +6,14 @@
               <input type="text" name="q" class="form-control input-lg" placeholder="SRA Search" autofocus="autofocus">
             </div>
             <div class="form-group">
+              <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                  <span></span> <b class="caret"></b>
+                  <input id="searchStart" type="hidden" name="start" value="">
+                  <input id="searchEnd" type="hidden" name="end" value="">
+              </div>
+            </div>
+            <div class="form-group">
               <button class="btn btn-primary btn-lg btn-block">Search</button>
               <span class="pull-right"><a href="#">Advanced Search</a></span>
               <span class="pull-left"><a href="#">Examples</a></span>

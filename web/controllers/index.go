@@ -39,10 +39,24 @@ func Home(c web.C, w http.ResponseWriter, r *http.Request) {
 
 func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
-	term, exists := q["q"]
-	if exists == false || term[0] == "" {
+	query, exists := q["q"]
+	if exists == false || query[0] == "" {
 		url := "/"
 		http.Redirect(w, r, url, http.StatusSeeOther)
+	}
+
+	start, exists := q["start"]
+	if exists == false || start[0] == "" {
+		err := fmt.Errorf("Please provide a valid start date!")
+		render.RenderError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	end, exists := q["end"]
+	if exists == false || start[0] == "" {
+		err := fmt.Errorf("Please provide a valid end date!")
+		render.RenderError(w, err, http.StatusInternalServerError)
+		return
 	}
 
 	// default query size
@@ -53,7 +67,19 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 		pageNum, _ = strconv.Atoi(page[0])
 	}
 
-	searchResults, err := searchdb.Query(term[0], pageNum, querySize)
+	fmt.Println("SearchStr:", query[0])
+	fmt.Println("Start:", start[0])
+	fmt.Println("End:", end[0])
+	fmt.Println("Page:", pageNum)
+
+	searchResults, err := searchdb.Query(
+		query[0],
+		start[0],
+		end[0],
+		pageNum,
+		querySize,
+	)
+
 	if err != nil {
 		render.RenderError(w, err, http.StatusInternalServerError)
 		return
@@ -66,11 +92,13 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 
 	data := make(map[string]interface{})
 	data["Title"] = "Beaker Search"
-	data["Query"] = term[0]
+	data["Query"] = query[0]
 	data["JsonStr"] = string(jsonStr)
 	data["searchResults"] = searchResults
 	data["pagination"] = pagination
 	data["Debug"] = Debug
+	data["Start"] = start[0]
+	data["End"] = end[0]
 
 	err = render.RenderHTML(w, templates, "base", data)
 	if err != nil {
