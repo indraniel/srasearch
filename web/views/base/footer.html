@@ -8,12 +8,12 @@ $(function() {
  
     {{ if and .Start .End }}
         $('#reportrange span').html(moment({{.Start}}, "YYYY-MM-DD").format('MMMM D, YYYY') + ' - ' + moment({{.End}}, "YYYY-MM-DD").format('MMMM D, YYYY'));
-        $('#searchStart').val(moment({{.Start}}, "YYYY-MM-DD"));
-        $('#searchEnd').val(moment({{.End}}, "YYYY-MM-DD"));
+        $('#searchStart').val(moment({{.Start}}, "YYYY-MM-DD").format("YYYY-MM-DD"));
+        $('#searchEnd').val(moment({{.End}}, "YYYY-MM-DD").format("YYYY-MM-DD"));
     {{else}}
         $('#reportrange span').html(moment().subtract(7, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-        $('#searchStart').val(moment().subtract(7, 'days').format('YYYY-MM-DD'));
-        $('#searchEnd').val(moment().format('YYYY-MM-DD'));
+        $('#searchStart').val(moment().subtract(7, 'days').format("YYYY-MM-DD"));
+        $('#searchEnd').val(moment().format("YYYY-MM-DD"));
     {{ end }}
 
     $('#reportrange').daterangepicker({
