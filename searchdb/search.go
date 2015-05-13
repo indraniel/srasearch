@@ -3,6 +3,7 @@ package searchdb
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/blevesearch/bleve"
 
@@ -39,24 +40,41 @@ func GetSRAItem(id string) (*sra.SraItem, error) {
 }
 
 func Query(qryString, start, end string, page, querySize int) (*bleve.SearchResult, error) {
+	// setup query string
 	inputQuery := bleve.NewQueryStringQuery(qryString)
 	tsQuery := bleve.NewDateRangeQuery(&start, &end)
 	query := bleve.NewConjunctionQuery([]bleve.Query{inputQuery, tsQuery})
 
 	from := (page - 1) * querySize
 
+	// setup search options
 	search := bleve.NewSearchRequestOptions(query, querySize, from, false)
-	search.Fields = []string{"*"}
-	search.AddFacet("Types", bleve.NewFacetRequest("Type", 7))
-	//	search.Highlight = bleve.NewHighlightWithStyle("html")
-	//	search.Highlight.AddField("XML.Alias")
-	//	search.Highlight.AddField("XML.Description")
-	//	search.Highlight.AddField("XML.SubmissionId")
-	//	search.Highlight.AddField("SubmissionId")
-	//	search.Highlight.AddField("Published")
-	//	search.Highlight.AddField("Type")
+	search.Fields = []string{"*"} // search and display on all the fields
 
-	searchResults, err := index.Search(search)
+	// facet on 'submission', 'study', 'sample', 'experiment', 'run', 'analysis'
+	search.AddFacet("Types", bleve.NewFacetRequest("Type", 6))
+
+	// run search query with a 1 minute timeout
+	var timeout time.Duration = 1 /* 1 minute */
+	var searchResults *bleve.SearchResult = nil
+	var err error
+	errch := make(chan error)
+
+	go func() {
+		results, e := index.Search(search)
+		searchResults = results
+		errch <- e
+	}()
+
+	select {
+	case e := <-errch:
+		err = e
+	case <-time.After(time.Minute * timeout):
+		err = fmt.Errorf("Search Timeout (%d mins): %s", timeout,
+			"Please refine your query, or narrow your time range",
+		)
+	}
+
 	if err == nil && (len(searchResults.Hits) == 0 && page != 1) {
 		e := fmt.Errorf(
 			"Page %d is is out of bounds on search request",
