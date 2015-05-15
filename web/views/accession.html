@@ -129,6 +129,12 @@
                             <h3 class="section-header">XML</h3>
                             <table class="table table-hover table-condensed">
                             <tbody>
+                                {{ if len .SRAItem.SubmitFiles }}
+                                <tr>
+                                    <th scope="row">Original Submission Files</th>
+                                    <td>{{.SRAItem.SubmitFiles}}</td>
+                                </tr>
+                                {{ end }}
                                 <tr>
                                     <th scope="row">File Name</th>
                                     <td>{{.SRAItem.XMLFileName}}</td>
