@@ -4,5 +4,5 @@ $('#load').on('click', function() {
     $this.parents('form#search-form').submit();
     setTimeout(function() {
         $this.button('reset');
-    }, 6000);
+    }, 59000);
 });
