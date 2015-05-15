@@ -34,6 +34,7 @@ func NewWeb(port int, host, idxPath string, debug bool) *Web {
 
 func (w Web) Main() {
 	// Setup Search Database
+	fmt.Println("Initializing the Bleve Search Database:", w.IndexPath)
 	if err := searchdb.Init(w.IndexPath); err != nil {
 		log.Fatalf(
 			"Couldn't open Bleve Index Path: %s : %s",
