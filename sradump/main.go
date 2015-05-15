@@ -6,9 +6,12 @@ import (
 	"os"
 )
 
-func RunSraDump(tarfile, output string) {
+func RunSraDump(metadata, uploads, output string) {
 	log.Println("Collecting Accession Stats")
-	db := CollectAccessionStats(tarfile)
+	dbAccessions := CollectAccessionStats(metadata)
+
+	log.Println("Collecting Uploads Stats")
+	dbUploads := CollectUploadStats(uploads)
 
 	log.Println("Processing XMLs / Creating Dump File")
 
@@ -16,7 +19,7 @@ func RunSraDump(tarfile, output string) {
 	defer os.Remove(tmpfile)
 	defer os.Remove(tmpdir)
 	log.Println("Tmp Dump File is:", tmpfile)
-	ProcessTarXMLs(tarfile, db, tmpfile)
+	ProcessTarXMLs(metadata, dbAccessions, dbUploads, tmpfile)
 
 	log.Println("Compressing Dump File")
 	err := CompressDumpFile(tmpfile, output)

@@ -16,18 +16,20 @@ import (
 	"os"
 	"path"
 	"strings"
-	"time"
 )
 
-func RunMerge(tarfile, dumpfile, output string) {
+func RunMerge(metadata, uploads, dumpfile, output string) {
 	log.Println("Collecting Accession Stats")
-	accessionDB, accession_order := CollectAccessionStats(tarfile)
+	accessionDB, accession_order := CollectAccessionStats(metadata)
+
+	log.Println("Collecting Uploads Stats")
+	uploadsDB := sradump.CollectUploadStats(uploads)
 
 	log.Println("Building Data Structure From Prior Dump")
 	dumpDB := CollectDumpStats(dumpfile)
 
 	log.Println("Building Incremental Data Structure from tar file")
-	incrementalDB := ProcessTarXMLs(tarfile, accessionDB)
+	incrementalDB := ProcessTarXMLs(metadata, accessionDB, uploadsDB)
 
 	tmpdir, tmpfile := makeTmpFile()
 	defer os.Remove(tmpfile)
@@ -90,9 +92,9 @@ func CollectAccessionStats(tarfile string) (
 		}
 
 		accession := record[0]
-		updatedTime := parseTime(record[3])
-		publishedTime := parseTime(record[4])
-		receivedTime := parseTime(record[5])
+		updatedTime := utils.ParseTime(record[3])
+		publishedTime := utils.ParseTime(record[4])
+		receivedTime := utils.ParseTime(record[5])
 		r := &sra.AccessionRecord{
 			Status:     record[2],
 			Updated:    updatedTime,
@@ -102,7 +104,7 @@ func CollectAccessionStats(tarfile string) (
 			Alias:      record[9],
 			Experiment: record[10],
 			Sample:     record[11],
-			Study:      record[13],
+			Study:      record[12],
 			MD5:        record[16],
 			BioSample:  record[17],
 			BioProject: record[18],
@@ -113,18 +115,6 @@ func CollectAccessionStats(tarfile string) (
 
 	log.Println("Processed", i, "accession records")
 	return &db, accessions
-}
-
-func parseTime(ts string) time.Time {
-	if ts == "-" {
-		return time.Time{}
-	}
-
-	t, err := time.Parse("2006-01-02T15:04:05Z", ts)
-	if err != nil {
-		log.Fatalf("Trouble parsing timestamp: '%s' : %s\n", ts, err)
-	}
-	return t
 }
 
 func CollectDumpStats(dumpfile string) *map[string]*sra.SraItem {
@@ -165,6 +155,7 @@ func CollectDumpStats(dumpfile string) *map[string]*sra.SraItem {
 func ProcessTarXMLs(
 	tarfile string,
 	accessionDB *map[string]*sra.AccessionRecord,
+	uploadsDB *map[string][]string,
 ) *map[string]*sra.SraItem {
 	f, gzf := utils.OpenGZFile(tarfile)
 	defer utils.CloseGZFile(f, gzf)
@@ -195,7 +186,7 @@ func ProcessTarXMLs(
 			if isXML(name) {
 				buf := new(bytes.Buffer)
 				io.Copy(buf, tarReader)
-				sraItems := processXML(accessionDB, name, buf)
+				sraItems := processXML(accessionDB, uploadsDB, name, buf)
 				for _, si := range sraItems {
 					db[si.Id] = si
 				}
@@ -225,13 +216,15 @@ func isXML(filename string) bool {
 }
 
 func processXML(
-	db *map[string]*sra.AccessionRecord,
+	accessionDB *map[string]*sra.AccessionRecord,
+	uploadsDB *map[string][]string,
 	name string,
 	contents *bytes.Buffer,
 ) []*sra.SraItem {
 	sraItems := sra.NewSraItemsFromXML(name, contents.Bytes())
 	for _, si := range sraItems {
-		si.AddAttrFromAccessionRecords(db)
+		si.AddAttrFromAccessionRecords(accessionDB)
+		si.AddAttrFromUploadRecords(uploadsDB)
 	}
 
 	return sraItems

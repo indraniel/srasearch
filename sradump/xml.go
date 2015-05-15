@@ -16,7 +16,8 @@ import (
 
 func ProcessTarXMLs(
 	tarfile string,
-	db *map[string]*sra.AccessionRecord,
+	dbAccessions *map[string]*sra.AccessionRecord,
+	dbUploads *map[string][]string,
 	outFile string,
 ) {
 	f, gzf := utils.OpenGZFile(tarfile)
@@ -52,7 +53,7 @@ func ProcessTarXMLs(
 			if isXML(name) {
 				buf := new(bytes.Buffer)
 				io.Copy(buf, tarReader)
-				processXML(db, outPtr, name, buf)
+				processXML(dbAccessions, dbUploads, outPtr, name, buf)
 			}
 		default:
 			fmt.Printf("%s: %c %s %s\n",
@@ -77,14 +78,16 @@ func isXML(filename string) bool {
 }
 
 func processXML(
-	db *map[string]*sra.AccessionRecord,
+	dbAccessions *map[string]*sra.AccessionRecord,
+	dbUploads *map[string][]string,
 	outPtr *os.File,
 	name string,
 	contents *bytes.Buffer,
 ) {
 	sraItems := sra.NewSraItemsFromXML(name, contents.Bytes())
 	for _, si := range sraItems {
-		si.AddAttrFromAccessionRecords(db)
+		si.AddAttrFromAccessionRecords(dbAccessions)
+		si.AddAttrFromUploadRecords(dbUploads)
 		json, err := json.Marshal(si)
 		if err != nil {
 			log.Fatal("Trouble encoding '%s' into json: %s\n",

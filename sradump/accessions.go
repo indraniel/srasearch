@@ -10,7 +10,6 @@ import (
 	"io"
 	"log"
 	"strings"
-	"time"
 )
 
 func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
@@ -37,9 +36,9 @@ func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
 		}
 
 		accession := record[0]
-		updatedTime := parseTime(record[3])
-		publishedTime := parseTime(record[4])
-		receivedTime := parseTime(record[5])
+		updatedTime := utils.ParseTime(record[3])
+		publishedTime := utils.ParseTime(record[4])
+		receivedTime := utils.ParseTime(record[5])
 		r := &sra.AccessionRecord{
 			Status:     record[2],
 			Updated:    updatedTime,
@@ -59,18 +58,6 @@ func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
 
 	log.Println("Processed", i, "accession records")
 	return &db
-}
-
-func parseTime(ts string) time.Time {
-	if ts == "-" {
-		return time.Time{}
-	}
-
-	t, err := time.Parse("2006-01-02T15:04:05Z", ts)
-	if err != nil {
-		log.Fatalf("Trouble parsing timestamp: '%s' : %s\n", ts, err)
-	}
-	return t
 }
 
 func getAccessionFileContents(tarfile string) *bytes.Buffer {

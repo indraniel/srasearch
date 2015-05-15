@@ -2,27 +2,26 @@ package commands
 
 import (
 	"github.com/indraniel/srasearch/sradump"
+	"github.com/indraniel/srasearch/utils"
 	"github.com/spf13/cobra"
 	"log"
-	"os"
 )
 
 type SraDumpCmdOpts struct {
-	output string
+	output   string
+	metadata string
+	uploads  string
 }
 
 var SraDumpOpts SraDumpCmdOpts
 
 var cmdSraDump = &cobra.Command{
-	Use:   "sra-dump [path/to/NCBIDownloadTarFile]",
+	Use:   "sra-dump -o <output> -m <ncbi-metadata.tar.gz> -u <ncbi-uploads.gz>",
 	Short: "Transform the NCBI Batch Telemetry tar files to a set of JSON Docs",
 	Long: `This command transforms the raw NCBI Batch Telemetry tar file
          contents into a intermediary file of custom JSON Documents`,
 	Run: func(cmd *cobra.Command, args []string) {
-		tarfile := getTarFile(args)
-		checkTarExists(tarfile)
-		SraDumpOpts.processOpts()
-		SraDumpOpts.mainRun(tarfile)
+		SraDumpOpts.main()
 	},
 }
 
@@ -34,10 +33,29 @@ func init() {
 		"sradump.sjd.gz",
 		"the output file to dump the serialized JSON Documents to",
 	)
+
+	cmdSraDump.Flags().StringVarP(
+		&SraDumpOpts.metadata,
+		"ncbi-metadata",
+		"m",
+		"sradump.sjd.gz",
+		"the NCBI SRA Metadata tar.gz file",
+	)
+
+	cmdSraDump.Flags().StringVarP(
+		&SraDumpOpts.uploads,
+		"ncbi-uploads",
+		"u",
+		"sradump.sjd.gz",
+		"teh NCBI SRA Uploads gzip file",
+	)
 }
 
-func (opts SraDumpCmdOpts) mainRun(tarfile string) {
-	sradump.RunSraDump(tarfile, opts.output)
+func (opts SraDumpCmdOpts) main() {
+	SraDumpOpts.processOpts()
+	utils.CheckFileExists(opts.metadata)
+	utils.CheckFileExists(opts.uploads)
+	sradump.RunSraDump(opts.metadata, opts.uploads, opts.output)
 }
 
 func (opts SraDumpCmdOpts) processOpts() {
@@ -47,27 +65,18 @@ func (opts SraDumpCmdOpts) processOpts() {
 			"to via --output !",
 		)
 	}
-}
 
-func checkTarExists(tarfile string) {
-	if _, err := os.Stat(tarfile); os.IsNotExist(err) {
-		log.Fatalf(
-			"Could not find '%s' on file system: %s",
-			tarfile, err,
+	if opts.metadata == "" {
+		log.Fatal(
+			"Please supply the NCBI SRA Metadata file",
+			"via --metadata !",
 		)
 	}
-}
 
-func getTarFile(args []string) (tarfile string) {
-	if len(args) == 0 {
-		log.Fatal("Please supply a tar file as an argument!")
+	if opts.uploads == "" {
+		log.Fatal(
+			"Please supply the NCBI SRA Uploads file",
+			"via --uploads !",
+		)
 	}
-
-	tarfile = args[0]
-
-	if tarfile == "" {
-		log.Fatal("Please supply a tar file as an argument!")
-	}
-
-	return
 }
