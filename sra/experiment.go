@@ -73,3 +73,8 @@ func (se SraExp) XMLString() string {
 func (se SraExp) GetAccession() string {
 	return se.Accession.String()
 }
+
+/* MGI specific */
+func (se SraExp) IMPType() string {
+	return "sra-experiment"
+}

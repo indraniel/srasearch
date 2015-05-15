@@ -39,3 +39,7 @@ func (ss SraSubmission) GetAccessions() []string {
 func (ss SraSubmission) GetAccession() string {
 	return ss.Accession.String()
 }
+
+func (ss SraSubmission) IMPType() string {
+	return "sra-submission"
+}

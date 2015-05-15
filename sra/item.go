@@ -26,6 +26,7 @@ type Itemer interface {
 	String() string
 	XMLString() string
 	GetAccession() string
+	IMPType() string
 }
 
 type SraItem struct {
@@ -53,6 +54,12 @@ type SraItem struct {
 func (si *SraItem) setId() {
 	accession := si.XML.GetAccession()
 	si.Id = accession
+}
+
+/* MGI specific */
+func (si *SraItem) IMPEntityType() string {
+	entityType := si.XML.IMPType()
+	return entityType
 }
 
 func (si *SraItem) AddAttrFromAccessionRecords(

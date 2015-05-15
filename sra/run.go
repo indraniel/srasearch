@@ -73,3 +73,8 @@ func (sr SraRun) XMLString() string {
 func (sr SraRun) GetAccession() string {
 	return sr.Accession.String()
 }
+
+/* MGI Specific */
+func (sr SraRun) IMPType() string {
+	return "sra-run"
+}

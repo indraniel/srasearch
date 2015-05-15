@@ -116,6 +116,14 @@
                                     <td><a href="/accession/{{.SRAItem.Experiment}}">{{.SRAItem.Experiment}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Experiment}}">NCBI</a></td>
                                     {{ end }}
                                 </tr>
+                                <tr>
+                                    <th scope="row">Alias</th>
+                                    {{ if eq .SRAItem.Alias "-" }}
+                                    <td>{{.SRAItem.Alias}}</td>
+                                    {{ else }}
+                                    <td><a href="https://imp-lims.gsc.wustl.edu/entity/{{.SRAItem.IMPEntityType}}/{{.SRAItem.Alias}}">{{.SRAItem.Alias}}</a></td>
+                                    {{ end }}
+                                </tr>
                             </tbody>
                             </table>
                             <h3 class="section-header">XML</h3>
