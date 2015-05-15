@@ -1,7 +1,7 @@
 {{define "body"}}
     <div class="starter-template">
           <div class="row bottom-buffer"><img src="/imgs/beaker.jpg"/></div>
-          <form class="form col-md-12 center-block" action="/search">
+          <form id="search-form" class="form col-md-12 center-block" action="/search">
             <div class="form-group">
               <input type="text" name="q" class="form-control input-lg" placeholder="SRA Search" autofocus="autofocus">
             </div>
@@ -14,7 +14,7 @@
               </div>
             </div>
             <div class="form-group">
-              <button class="btn btn-primary btn-lg btn-block">Search</button>
+                <button class="btn btn-primary btn-lg btn-block" id="load" data-searching-text="<i class='fa fa-spinner fa-spin'></i>Searching..." type="button">Search</button>
               <span class="pull-right"><a href="#">Advanced Search</a></span>
               <span class="pull-left"><a href="#">Examples</a></span>
             </div>
