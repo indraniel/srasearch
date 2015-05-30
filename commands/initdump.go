@@ -30,7 +30,7 @@ func init() {
 		&InitDumpOpts.output,
 		"output",
 		"o",
-		"may-2015-dump-01.dat.gz",
+		"2015-05-01-dump.dat.gz",
 		"the output file to dump the serialized JSON Documents to",
 	)
 

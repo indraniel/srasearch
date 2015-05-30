@@ -1,4 +1,4 @@
-package merge
+package incrementdump
 
 import (
 	"github.com/indraniel/srasearch/ncbiparser"
@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-func RunMerge(metadata, uploads, dumpfile, output string) {
+func Main(metadata, uploads, dumpfile, output string) {
 	log.Println("Collecting Accession Stats")
 	accessionDB, accession_order := ncbiparser.CollectAccessionStats(metadata)
 
