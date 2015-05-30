@@ -109,7 +109,7 @@ func merge(
 		// problematic cases -- specially handle and note
 		if accessionRecord, ok := (*accessionDB)[accession]; ok {
 			fmt.Printf(
-				"--> [%d] Got a NCBI 'unprocessed' record: %s (%s)\n",
+				"--> [%d] Got a NCBI record with no XML : %s (%s)\n",
 				i, accession, accessionRecord.Status,
 			)
 			sraItem := new(sra.SraItem)
