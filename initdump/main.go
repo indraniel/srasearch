@@ -1,4 +1,4 @@
-package sradump
+package initdump
 
 import (
 	"github.com/indraniel/srasearch/ncbiparser"
@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-func RunSraDump(metadata, uploads, output string) {
+func Main(metadata, uploads, output string) {
 	log.Println("Collecting Accession Stats")
 	accessionDB, accession_order := ncbiparser.CollectAccessionStats(metadata)
 
