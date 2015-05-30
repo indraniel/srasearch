@@ -50,7 +50,7 @@ func makeDumpFile(
 	defer outPtr.Close()
 
 	for i, accession := range accessions {
-		// the "usual" stuff should be in the prior dump
+		// the majority of stuff should be in the tar file XMLs
 		if sraItem, ok := (*tarDB)[accession]; ok {
 			sraItem.Record(outPtr)
 			continue
