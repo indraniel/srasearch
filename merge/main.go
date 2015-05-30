@@ -36,7 +36,7 @@ func RunMerge(metadata, uploads, dumpfile, output string) {
 	defer os.Remove(tmpdir)
 	log.Println("Tmp Dump File is:", tmpfile)
 	log.Println("Merging Data Structures into Tmp Dump File:", tmpfile)
-	merge(accession_order, accessionDB, dumpDB, incrementalDB, tmpfile)
+	merge(accession_order, accessionDB, dumpDB, incrementalDB, uploadsDB, tmpfile)
 
 	log.Println("Compressing Dump File")
 	err := sradump.CompressDumpFile(tmpfile, output)
@@ -236,6 +236,7 @@ func merge(
 	accessionDB *map[string]*sra.AccessionRecord,
 	dumpDB *map[string]*sra.SraItem,
 	incrementalDB *map[string]*sra.SraItem,
+	uploadsDB *map[string][]string,
 	outFile string,
 ) {
 
@@ -246,32 +247,34 @@ func merge(
 	defer outPtr.Close()
 
 	for i, accession := range accessions {
+		// the "hot" stuff should be in the incremental file
 		if sraItem, ok := (*incrementalDB)[accession]; ok {
 			recordSraItem(sraItem, outPtr)
 			continue
 		}
 
+		// the "usual" stuff should be in the prior dump
 		if sraItem, ok := (*dumpDB)[accession]; ok {
 			recordSraItem(sraItem, outPtr)
 			continue
 		}
 
-		// specially handle "withdrawn" records
-		if accessionRecord, ok := (*accessionDB)[accession]; ok &&
-			accessionRecord.Status == "withdrawn" {
+		// problematic cases -- specially handle and note
+		if accessionRecord, ok := (*accessionDB)[accession]; ok {
 			fmt.Printf(
-				"--> [%d] Got 'missing' record: %s\n",
-				i, accession,
+				"--> [%d] Got a NCBI 'unprocessed' record: %s (%s)\n",
+				i, accession, accessionRecord.Status,
 			)
-			fmt.Printf("--> Status: %s\n", accessionRecord.Status)
 			sraItem := new(sra.SraItem)
 			sraItem.Id = accession
 			sraItem.AddAttrFromAccessionRecords(accessionDB)
+			sraItem.AddAttrFromUploadRecords(uploadsDB)
 			recordSraItem(sraItem, outPtr)
 			continue
 		}
 
-		log.Fatalln("Don't know how to merge accession: ", accession)
+		// this shouldn't be happening...but you never know...
+		log.Fatalln("[err] Don't know how to merge accession: ", accession, "!")
 	}
 }
 
