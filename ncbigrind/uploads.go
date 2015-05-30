@@ -1,17 +1,18 @@
-package sradump
+package ncbigrind
 
 import (
 	"github.com/indraniel/srasearch/utils"
+
 	"encoding/csv"
 	"io"
 	"log"
 )
 
 func CollectUploadStats(uploads string) *map[string][]string {
-	f, gzf := utils.OpenGZFile(uploads)
-	defer utils.CloseGZFile(f, gzf)
+	gzreader := utils.OpenGZFile(uploads)
+	defer gzreader.Close()
 
-	reader := csv.NewReader(gzf)
+	reader := csv.NewReader(gzreader.Gzf)
 	reader.FieldsPerRecord = 20
 	reader.LazyQuotes = true
 	reader.Comma = '\t'
