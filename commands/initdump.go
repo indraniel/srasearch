@@ -17,9 +17,8 @@ var InitDumpOpts InitDumpCmdOpts
 
 var cmdInitDump = &cobra.Command{
 	Use:   "init-dump -o <output> -m <ncbi-metadata.tar.gz> -u <ncbi-uploads.gz>",
-	Short: "Transform the NCBI Batch Telemetry tar files to a set of JSON Docs",
-	Long: `This command transforms the raw NCBI Batch Telemetry tar file
-         contents into a intermediary file of custom JSON Documents`,
+	Short: "Transform the NCBI Batch Telemetry files to a set of JSON Docs (SRA Dump)",
+	Long:  `Transform the raw full NCBI Batch Telemetry files into an intermediary dump file of custom JSON Documents (SRA Dump)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		InitDumpOpts.main()
 	},

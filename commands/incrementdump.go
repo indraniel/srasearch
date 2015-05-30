@@ -18,8 +18,8 @@ var IncrementDumpOpts IncrementDumpCmdOpts
 
 var cmdIncrementDump = &cobra.Command{
 	Use:   "increment-dump -i <prior-dump.gz> -m <ncbi-metadata.tar.gz> -u <ncbi-uploads.gz> -o <new-dump.gz>",
-	Short: "Incorporate new NCBI Batch Telemetry tar incrementals to an existing SRA Dump",
-	Long:  `This command updates an existing SRA dump file with new incremental NCBI Batch Telemetry file information`,
+	Short: "Incorporate new NCBI Batch Telemetry incrementals files to an existing SRA Dump",
+	Long:  `Update an existing SRA Dump file given new incremental NCBI Batch Telemetry file information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		IncrementDumpOpts.main()
 	},
