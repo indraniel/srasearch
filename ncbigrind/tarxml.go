@@ -14,7 +14,7 @@ import (
 
 func ProcessTarXMLs(
 	tarfile string,
-	accessionDB *map[string]*AccessionRecord,
+	accessionDB *map[string]*sra.AccessionRecord,
 	uploadsDB *map[string][]string,
 ) *map[string]*sra.SraItem {
 	gzreader := utils.OpenGZFile(tarfile)
@@ -76,7 +76,7 @@ func isXML(filename string) bool {
 }
 
 func processXML(
-	accessionDB *map[string]*AccessionRecord,
+	accessionDB *map[string]*sra.AccessionRecord,
 	uploadsDB *map[string][]string,
 	name string,
 	contents *bytes.Buffer,

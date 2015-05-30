@@ -38,7 +38,7 @@ func RunSraDump(metadata, uploads, output string) {
 
 func makeDumpFile(
 	accessions []string,
-	accessionDB *map[string]*ncbigrind.AccessionRecord,
+	accessionDB *map[string]*sra.AccessionRecord,
 	tarDB *map[string]*sra.SraItem,
 	uploadsDB *map[string][]string,
 	outFile string,
