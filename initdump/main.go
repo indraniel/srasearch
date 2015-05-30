@@ -11,23 +11,24 @@ import (
 )
 
 func Main(metadata, uploads, output string) {
-	log.Println("Collecting Accession Stats")
+	log.Println("Collecting Accession Stats from:", metadata)
 	accessionDB, accession_order := ncbiparser.CollectAccessionStats(metadata)
 
-	log.Println("Collecting Uploads Stats")
+	log.Println("Collecting Uploads Stats from:", uploads)
 	uploadsDB := ncbiparser.CollectUploadStats(uploads)
 
-	log.Println("Processing XMLs in metadata/tar File")
+	log.Println("Parsing XMLs in metadata/tar file:", metadata)
 	tarDB := ncbiparser.ProcessTarXMLs(metadata, accessionDB, uploadsDB)
 
 	tmpdir, tmpfile := utils.MakeTmpFile()
 	defer os.Remove(tmpfile)
 	defer os.Remove(tmpdir)
-	log.Println("Tmp Dump File is:", tmpfile)
 
+	log.Println("Constructing intermediate dump file in tmp")
+	log.Println("Tmp Dump File is:", tmpfile)
 	makeDumpFile(accession_order, accessionDB, tarDB, uploadsDB, tmpfile)
 
-	log.Println("Compressing Dump File")
+	log.Println("Compressing and finalizing Dump File to:", output)
 	err := utils.CompressFile(tmpfile, output)
 	if err != nil {
 		log.Print("Trouble making gzip file:", err)
