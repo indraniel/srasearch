@@ -10,6 +10,7 @@ type AccessionRecord struct {
 	Updated    time.Time
 	Published  time.Time
 	Received   time.Time
+	Type       string
 	Visibility string
 	Experiment string
 	Sample     string
@@ -33,6 +34,7 @@ func (ar AccessionRecord) String() string {
 	received := fmt.Sprintf("Received   : %s\n",
 		ar.Received.Format("2006-01-02T15:04:05Z"))
 
+	sratype := fmt.Sprintf("Type       : %s\n", ar.Type)
 	visibility := fmt.Sprintf("Visibility : %s\n", ar.Visibility)
 	experiment := fmt.Sprintf("Experiment : %s\n", ar.Experiment)
 	sample := fmt.Sprintf("Sample     : %s\n", ar.Sample)
@@ -43,7 +45,7 @@ func (ar AccessionRecord) String() string {
 	alias := fmt.Sprintf("Alias      : %s\n", ar.Alias)
 	issues := fmt.Sprintf("Issues     : %s\n", ar.Issues)
 
-	return alias + status + issues + updated + published + received +
-		visibility + study + bioproject + sample + biosample +
+	return alias + status + sratype + issues + updated + published +
+		received + visibility + study + bioproject + sample + biosample +
 		experiment + md5
 }

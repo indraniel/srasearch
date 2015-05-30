@@ -72,6 +72,7 @@ func (si *SraItem) AddAttrFromAccessionRecords(
 		si.BioProject = data.BioProject
 		si.Alias = data.Alias
 		si.Issues = data.Issues
+		si.Type = data.Type
 	}
 }
 

@@ -45,11 +45,13 @@ func CollectAccessionStats(tarfile string) (
 		updatedTime := utils.ParseTime(record[3])
 		publishedTime := utils.ParseTime(record[4])
 		receivedTime := utils.ParseTime(record[5])
+		sraType := strings.ToLower(record[6])
 		r := &sra.AccessionRecord{
 			Status:     record[2],
 			Updated:    updatedTime,
 			Published:  publishedTime,
 			Received:   receivedTime,
+			Type:       sraType,
 			Visibility: record[8],
 			Alias:      record[9],
 			Experiment: record[10],
