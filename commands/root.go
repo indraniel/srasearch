@@ -25,8 +25,8 @@ func Execute(semanticVersion string) {
 }
 
 func AddCommands() {
-	rootCmd.AddCommand(cmdSraDump)
+	rootCmd.AddCommand(cmdInitDump)
 	rootCmd.AddCommand(cmdVersion)
 	rootCmd.AddCommand(cmdMakeIndex)
-	rootCmd.AddCommand(cmdMerge)
+	rootCmd.AddCommand(cmdIncrementDump)
 }

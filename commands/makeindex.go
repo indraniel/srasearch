@@ -16,8 +16,8 @@ var MkIdxOpts MkIdxCmdOpts
 
 var cmdMakeIndex = &cobra.Command{
 	Use:   "make-index -i <sra-dump.sjd> -o <srasearch.idx>",
-	Short: "Generate an search index file from a sradump file",
-	Long:  `Generate an search index file from a sradump file`,
+	Short: "Generate an search index file from a SRA Dump file",
+	Long:  `Generate an search index file from a SRA Dump file`,
 	Run: func(cmd *cobra.Command, args []string) {
 		MkIdxOpts.processOpts()
 		MkIdxOpts.mainRun()

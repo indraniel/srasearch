@@ -4,11 +4,14 @@ package sra
 // http://www.ncbi.nlm.nih.gov/books/NBK56913/#search.what_do_the_different_sra_accessi
 
 import (
+	"github.com/indraniel/srasearch/utils"
+
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -43,6 +46,7 @@ type SraItem struct {
 	BioProject   string
 	Alias        string
 	SubmitFiles  []string
+	Issues       string
 	XML          Itemer
 }
 
@@ -67,6 +71,8 @@ func (si *SraItem) AddAttrFromAccessionRecords(
 		si.BioSample = data.BioSample
 		si.BioProject = data.BioProject
 		si.Alias = data.Alias
+		si.Issues = data.Issues
+		si.Type = data.Type
 	}
 }
 
@@ -99,6 +105,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		BioProject   string
 		Alias        string
 		SubmitFiles  []string
+		Issues       string
 		XML          json.RawMessage
 	}
 
@@ -120,6 +127,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 	si.BioSample = aux.BioSample
 	si.BioProject = aux.BioProject
 	si.Alias = aux.Alias
+	si.Issues = aux.Issues
 
 	for _, file := range aux.SubmitFiles {
 		si.SubmitFiles = append(si.SubmitFiles, file)
@@ -223,6 +231,21 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 
 	si.XML = item
 	return nil
+}
+
+func (si *SraItem) Record(outPtr *os.File) {
+	json, err := json.Marshal(si)
+	if err != nil {
+		log.Fatal("Trouble encoding '%s' into json: \n%+v\n",
+			si, err)
+	}
+
+	line := strings.Join([]string{si.Id, string(json)}, ",")
+
+	_, err = outPtr.WriteString(line)
+	utils.CheckWrite(outPtr, err)
+	_, err = outPtr.Write([]byte("\n"))
+	utils.CheckWrite(outPtr, err)
 }
 
 func NewSraItemsFromXML(filename string, contents []byte) []*SraItem {

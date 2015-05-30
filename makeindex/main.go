@@ -26,8 +26,8 @@ func CreateSearchIndex(input, output string) {
 
 	batchSize := 100
 
-	f, gzf := utils.OpenGZFile(input)
-	defer utils.CloseGZFile(f, gzf)
+	gzreader := utils.OpenGZFile(input)
+	defer gzreader.Close()
 
 	mapping := bleve.NewIndexMapping()
 	index, err := bleve.New(output, mapping)
@@ -35,7 +35,7 @@ func CreateSearchIndex(input, output string) {
 		log.Fatalln("Trouble making a bleve index! :", err)
 	}
 
-	reader := bufio.NewReader(gzf)
+	reader := bufio.NewReader(gzreader.Gzf)
 	line, err := reader.ReadString('\n')
 
 	count := 0
@@ -73,7 +73,7 @@ func CreateSearchIndex(input, output string) {
 	}
 
 	if err != io.EOF {
-		log.Fatalln("[err] reading line ", count, "in", f.Name(), ":", err)
+		log.Fatalln("[err] reading line ", count, "in", gzreader.File.Name(), ":", err)
 	}
 
 	// flush the last batch

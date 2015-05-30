@@ -1,9 +1,10 @@
-package sradump
+package ncbiparser
 
 import (
-	"archive/tar"
 	"github.com/indraniel/srasearch/sra"
 	"github.com/indraniel/srasearch/utils"
+
+	"archive/tar"
 	"bytes"
 	"encoding/csv"
 	"fmt"
@@ -12,7 +13,10 @@ import (
 	"strings"
 )
 
-func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
+func CollectAccessionStats(tarfile string) (
+	*map[string]*sra.AccessionRecord,
+	[]string) {
+
 	data := getAccessionFileContents(tarfile)
 
 	reader := csv.NewReader(data)
@@ -20,6 +24,8 @@ func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
 	reader.Comma = '\t'
 
 	db := make(map[string]*sra.AccessionRecord)
+	accessions := make([]string, 0)
+
 	skip_header := true
 
 	i := 0
@@ -39,11 +45,13 @@ func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
 		updatedTime := utils.ParseTime(record[3])
 		publishedTime := utils.ParseTime(record[4])
 		receivedTime := utils.ParseTime(record[5])
+		sraType := strings.ToLower(record[6])
 		r := &sra.AccessionRecord{
 			Status:     record[2],
 			Updated:    updatedTime,
 			Published:  publishedTime,
 			Received:   receivedTime,
+			Type:       sraType,
 			Visibility: record[8],
 			Alias:      record[9],
 			Experiment: record[10],
@@ -52,19 +60,21 @@ func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
 			MD5:        record[16],
 			BioSample:  record[17],
 			BioProject: record[18],
+			Issues:     record[20],
 		}
 		db[accession] = r
+		accessions = append(accessions, accession)
 	}
 
 	log.Println("Processed", i, "accession records")
-	return &db
+	return &db, accessions
 }
 
 func getAccessionFileContents(tarfile string) *bytes.Buffer {
-	f, gzf := utils.OpenGZFile(tarfile)
-	defer utils.CloseGZFile(f, gzf)
+	gzreader := utils.OpenGZFile(tarfile)
+	defer gzreader.Close()
 
-	tarReader := tar.NewReader(gzf)
+	tarReader := tar.NewReader(gzreader.Gzf)
 
 	buf := new(bytes.Buffer)
 
