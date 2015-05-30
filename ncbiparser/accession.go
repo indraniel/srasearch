@@ -47,20 +47,21 @@ func CollectAccessionStats(tarfile string) (
 		receivedTime := utils.ParseTime(record[5])
 		sraType := strings.ToLower(record[6])
 		r := &sra.AccessionRecord{
-			Status:     record[2],
-			Updated:    updatedTime,
-			Published:  publishedTime,
-			Received:   receivedTime,
-			Type:       sraType,
-			Visibility: record[8],
-			Alias:      record[9],
-			Experiment: record[10],
-			Sample:     record[11],
-			Study:      record[12],
-			MD5:        record[16],
-			BioSample:  record[17],
-			BioProject: record[18],
-			Issues:     record[20],
+			Status:       record[2],
+			Updated:      updatedTime,
+			Published:    publishedTime,
+			Received:     receivedTime,
+			Type:         sraType,
+			Visibility:   record[8],
+			Alias:        record[9],
+			Experiment:   record[10],
+			Sample:       record[11],
+			Study:        record[12],
+			MD5:          record[16],
+			BioSample:    record[17],
+			BioProject:   record[18],
+			Issues:       record[20],
+			SubmissionId: record[1],
 		}
 		db[accession] = r
 		accessions = append(accessions, accession)
