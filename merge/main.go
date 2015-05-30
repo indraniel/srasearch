@@ -60,8 +60,8 @@ func collectDumpStats(dumpfile string) *map[string]*sra.SraItem {
 		si := new(sra.SraItem)
 		if e := json.Unmarshal([]byte(raw), si); e != nil {
 			log.Fatalf(
-				"Trouble json parsing accession record: %s\n",
-				raw,
+				"Trouble json parsing accession record: %s : %s\n",
+				raw, e,
 			)
 		}
 		db[accession] = si
