@@ -1,7 +1,7 @@
 package sradump
 
 import (
-	"github.com/indraniel/srasearch/ncbigrind"
+	"github.com/indraniel/srasearch/ncbiparser"
 	"github.com/indraniel/srasearch/sra"
 	"github.com/indraniel/srasearch/utils"
 
@@ -12,13 +12,13 @@ import (
 
 func RunSraDump(metadata, uploads, output string) {
 	log.Println("Collecting Accession Stats")
-	accessionDB, accession_order := ncbigrind.CollectAccessionStats(metadata)
+	accessionDB, accession_order := ncbiparser.CollectAccessionStats(metadata)
 
 	log.Println("Collecting Uploads Stats")
-	uploadsDB := ncbigrind.CollectUploadStats(uploads)
+	uploadsDB := ncbiparser.CollectUploadStats(uploads)
 
 	log.Println("Processing XMLs in metadata/tar File")
-	tarDB := ncbigrind.ProcessTarXMLs(metadata, accessionDB, uploadsDB)
+	tarDB := ncbiparser.ProcessTarXMLs(metadata, accessionDB, uploadsDB)
 
 	tmpdir, tmpfile := utils.MakeTmpFile()
 	defer os.Remove(tmpfile)

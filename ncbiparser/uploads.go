@@ -1,4 +1,4 @@
-package ncbigrind
+package ncbiparser
 
 import (
 	"github.com/indraniel/srasearch/utils"

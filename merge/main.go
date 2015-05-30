@@ -1,7 +1,7 @@
 package merge
 
 import (
-	"github.com/indraniel/srasearch/ncbigrind"
+	"github.com/indraniel/srasearch/ncbiparser"
 	"github.com/indraniel/srasearch/sra"
 	"github.com/indraniel/srasearch/utils"
 
@@ -16,16 +16,16 @@ import (
 
 func RunMerge(metadata, uploads, dumpfile, output string) {
 	log.Println("Collecting Accession Stats")
-	accessionDB, accession_order := ncbigrind.CollectAccessionStats(metadata)
+	accessionDB, accession_order := ncbiparser.CollectAccessionStats(metadata)
 
 	log.Println("Collecting Uploads Stats")
-	uploadsDB := ncbigrind.CollectUploadStats(uploads)
+	uploadsDB := ncbiparser.CollectUploadStats(uploads)
 
 	log.Println("Building Data Structure From Prior Dump")
 	dumpDB := collectDumpStats(dumpfile)
 
 	log.Println("Building Incremental Data Structure from tar file")
-	incrementalDB := ncbigrind.ProcessTarXMLs(metadata, accessionDB, uploadsDB)
+	incrementalDB := ncbiparser.ProcessTarXMLs(metadata, accessionDB, uploadsDB)
 
 	tmpdir, tmpfile := utils.MakeTmpFile()
 	defer os.Remove(tmpfile)
