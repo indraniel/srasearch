@@ -80,7 +80,7 @@ func collectDumpStats(dumpfile string) *map[string]*sra.SraItem {
 
 func merge(
 	accessions []string,
-	accessionDB *map[string]*sra.AccessionRecord,
+	accessionDB *map[string]*ncbigrind.AccessionRecord,
 	dumpDB *map[string]*sra.SraItem,
 	incrementalDB *map[string]*sra.SraItem,
 	uploadsDB *map[string][]string,

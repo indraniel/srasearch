@@ -4,6 +4,7 @@ package sra
 // http://www.ncbi.nlm.nih.gov/books/NBK56913/#search.what_do_the_different_sra_accessi
 
 import (
+	"github.com/indraniel/srasearch/ncbigrind"
 	"github.com/indraniel/srasearch/utils"
 
 	"bytes"
@@ -56,7 +57,7 @@ func (si *SraItem) setId() {
 }
 
 func (si *SraItem) AddAttrFromAccessionRecords(
-	db *map[string]*AccessionRecord,
+	db *map[string]*ncbigrind.AccessionRecord,
 ) {
 	if data, ok := (*db)[si.Id]; ok {
 		si.Status = data.Status
