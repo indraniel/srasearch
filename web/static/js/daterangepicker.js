@@ -4,6 +4,7 @@
 * @copyright: Copyright (c) 2012-2015 Dan Grossman. All rights reserved.
 * @license: Licensed under the MIT license. See http://www.opensource.org/licenses/mit-license.php
 * @website: https://www.improvely.com/
+* @github: https://github.com/dangrossman/bootstrap-daterangepicker
 */
 
 (function(root, factory) {

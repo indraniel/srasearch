@@ -11,6 +11,8 @@
                     <form id="search-form" action="/search">
                         <div class="form-group center-align">
                           <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                              <time id="range-start-time" datetime="{{.Start}}"></time>
+                              <time id="range-end-time" datetime="{{.End}}"></time>
                               <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                               <span></span> <b class="caret"></b>
                               <input id="searchStart" type="hidden" name="start" value="">
