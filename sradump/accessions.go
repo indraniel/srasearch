@@ -52,6 +52,7 @@ func CollectAccessionStats(tarfile string) *map[string]*sra.AccessionRecord {
 			MD5:        record[16],
 			BioSample:  record[17],
 			BioProject: record[18],
+			Issues:     record[20],
 		}
 		db[accession] = r
 	}

@@ -18,6 +18,7 @@ type AccessionRecord struct {
 	BioSample  string
 	BioProject string
 	Alias      string
+	Issues     string
 }
 
 func (ar AccessionRecord) String() string {
@@ -40,7 +41,9 @@ func (ar AccessionRecord) String() string {
 	biosample := fmt.Sprintf("BioSample  : %s\n", ar.BioSample)
 	bioproject := fmt.Sprintf("BioProject : %s\n", ar.BioProject)
 	alias := fmt.Sprintf("Alias      : %s\n", ar.Alias)
+	issues := fmt.Sprintf("Issues     : %s\n", ar.Issues)
 
-	return alias + status + updated + published + received + visibility +
-		study + bioproject + sample + biosample + experiment + md5
+	return alias + status + issues + updated + published + received +
+		visibility + study + bioproject + sample + biosample +
+		experiment + md5
 }

@@ -43,6 +43,7 @@ type SraItem struct {
 	BioProject   string
 	Alias        string
 	SubmitFiles  []string
+	Issues       string
 	XML          Itemer
 }
 
@@ -67,6 +68,7 @@ func (si *SraItem) AddAttrFromAccessionRecords(
 		si.BioSample = data.BioSample
 		si.BioProject = data.BioProject
 		si.Alias = data.Alias
+		si.Issues = data.Issues
 	}
 }
 
@@ -99,6 +101,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 		BioProject   string
 		Alias        string
 		SubmitFiles  []string
+		Issues       string
 		XML          json.RawMessage
 	}
 
@@ -120,6 +123,7 @@ func (si *SraItem) UnmarshalJSON(data []byte) error {
 	si.BioSample = aux.BioSample
 	si.BioProject = aux.BioProject
 	si.Alias = aux.Alias
+	si.Issues = aux.Issues
 
 	for _, file := range aux.SubmitFiles {
 		si.SubmitFiles = append(si.SubmitFiles, file)
