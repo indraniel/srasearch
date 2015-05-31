@@ -106,19 +106,6 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Results(c web.C, w http.ResponseWriter, r *http.Request) {
-	templates := render.BaseTemplates()
-	templates = append(templates, "web/views/results.html")
-
-	data := make(map[string]string)
-	data["Title"] = "Example Results"
-
-	err := render.RenderHTML(w, templates, "base", data)
-	if err != nil {
-		render.RenderError(w, err, http.StatusInternalServerError)
-	}
-}
-
 func Hello(c web.C, w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, %s!", c.URLParams["name"])
 }
