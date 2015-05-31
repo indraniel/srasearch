@@ -26,6 +26,10 @@ func Init(debug bool, indexPath string) {
 	setup.IndexPath = indexPath
 }
 
+func Hello(c web.C, w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, %s!", c.URLParams["name"])
+}
+
 func Home(c web.C, w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	if _, exists := q["q"]; exists {
@@ -114,8 +118,6 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Hello(c web.C, w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %s!", c.URLParams["name"])
 }
 
 func Examples(c web.C, w http.ResponseWriter, r *http.Request) {
