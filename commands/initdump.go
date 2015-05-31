@@ -3,7 +3,9 @@ package commands
 import (
 	"github.com/indraniel/srasearch/initdump"
 	"github.com/indraniel/srasearch/utils"
+
 	"github.com/spf13/cobra"
+
 	"log"
 )
 

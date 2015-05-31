@@ -2,9 +2,11 @@ package commands
 
 import (
 	"github.com/indraniel/srasearch/makeindex"
+	"github.com/indraniel/srasearch/utils"
+
 	"github.com/spf13/cobra"
+
 	"log"
-	"os"
 )
 
 type MkIdxCmdOpts struct {
