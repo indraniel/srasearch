@@ -118,6 +118,38 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func About(c web.C, w http.ResponseWriter, r *http.Request) {
+	templates := render.BaseTemplates()
+	templates = append(templates, "web/views/about.html")
+
+	pattern := "index_meta.json"
+	fullPattern := filepath.Join(setup.IndexPath, pattern)
+	file, err := utils.FindFile(fullPattern)
+	if err != nil {
+		render.RenderError(w, err, http.StatusNotFound)
+		return
+	}
+	mtime, err := utils.FileModificationTime(file)
+	if err != nil {
+		render.RenderError(w, err, http.StatusNotFound)
+		return
+	}
+
+	upFile, err := getUploadsFile()
+	if err != nil {
+		upFile = "-"
+	}
+
+	data := make(map[string]interface{})
+	data["Title"] = fmt.Sprintf("Beaker: Examples & Documentation")
+	data["IndexPath"] = setup.IndexPath
+	data["CreationTime"] = mtime
+	data["UploadsFile"] = upFile
+
+	err = render.RenderHTML(w, templates, "base", data)
+	if err != nil {
+		render.RenderError(w, err, http.StatusInternalServerError)
+	}
 }
 
 func Examples(c web.C, w http.ResponseWriter, r *http.Request) {
@@ -134,10 +166,7 @@ func Examples(c web.C, w http.ResponseWriter, r *http.Request) {
 }
 
 func Uploads(c web.C, w http.ResponseWriter, r *http.Request) {
-	pattern := "recent-*-sra-uploads-*.tsv"
-	fullPattern := filepath.Join(setup.IndexPath, pattern)
-	file, err := utils.FindFile(fullPattern)
-
+	file, err := getUploadsFile()
 	if err != nil {
 		render.RenderError(w, err, http.StatusNotFound)
 		return
@@ -175,4 +204,11 @@ func Accession(c web.C, w http.ResponseWriter, r *http.Request) {
 func NotFound(c web.C, w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(404)
 	render.RenderNotFound(w, r)
+}
+
+func getUploadsFile() (string, error) {
+	pattern := "recent-*-sra-uploads-*.tsv"
+	fullPattern := filepath.Join(setup.IndexPath, pattern)
+	file, err := utils.FindFile(fullPattern)
+	return file, err
 }

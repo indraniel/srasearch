@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 func CheckFileExists(file string) {
@@ -56,4 +57,15 @@ func FindFile(pattern string) (string, error) {
 	}
 
 	return matches[0], nil
+}
+
+func FileModificationTime(file string) (time.Time, error) {
+	finfo, err := os.Stat(file)
+	if err != nil {
+		e := fmt.Errorf("[%s] File Stat error : %s", file, err)
+		return time.Unix(0, 0), e
+	}
+
+	mtime := finfo.ModTime()
+	return mtime, nil
 }

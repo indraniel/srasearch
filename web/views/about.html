@@ -1,0 +1,20 @@
+{{define "body"}}
+<div class="jumbotron">
+    <h1>Info</h1>
+    <dl>
+        <dt>Search Database Index Path</dt>
+        <dd>{{.IndexPath}}</dd>
+
+        <dt>Search Database Creation Time</dt>
+        <dd>{{.CreationTime}}</dd>
+
+        <dt>Uploads File</dt>
+        <dd>{{.UploadsFile}}</dd>
+    </dl>
+</div>
+{{end}}
+
+{{define "javascript"}}
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+{{end}}
