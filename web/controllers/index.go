@@ -119,7 +119,16 @@ func Hello(c web.C, w http.ResponseWriter, r *http.Request) {
 }
 
 func Examples(c web.C, w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Examples stub.")
+	templates := render.BaseTemplates()
+	templates = append(templates, "web/views/examples.html")
+
+	data := make(map[string]interface{})
+	data["Title"] = fmt.Sprintf("Beaker: Examples & Documentation")
+
+	err := render.RenderHTML(w, templates, "base", data)
+	if err != nil {
+		render.RenderError(w, err, http.StatusInternalServerError)
+	}
 }
 
 func Uploads(c web.C, w http.ResponseWriter, r *http.Request) {
