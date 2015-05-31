@@ -66,14 +66,14 @@ func (opts InitDumpCmdOpts) processOpts() {
 	if opts.metadata == "" {
 		log.Fatal(
 			"Please supply the NCBI SRA Metadata file",
-			"via --metadata= !",
+			"via --ncbi-metadata= !",
 		)
 	}
 
 	if opts.uploads == "" {
 		log.Fatal(
 			"Please supply the NCBI SRA Uploads file",
-			"via --uploads= !",
+			"via --ncbi-uploads= !",
 		)
 	}
 
