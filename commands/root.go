@@ -30,4 +30,5 @@ func AddCommands() {
 	rootCmd.AddCommand(cmdVersion)
 	rootCmd.AddCommand(cmdMakeIndex)
 	rootCmd.AddCommand(cmdIncrementDump)
+	rootCmd.AddCommand(cmdMakeUploads)
 }
