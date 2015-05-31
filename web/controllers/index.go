@@ -1,21 +1,29 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strconv"
+	"github.com/indraniel/srasearch/searchdb"
+	"github.com/indraniel/srasearch/utils"
+	"github.com/indraniel/srasearch/web/render"
 
 	"github.com/zenazn/goji/web"
 
-	"github.com/indraniel/srasearch/searchdb"
-	"github.com/indraniel/srasearch/web/render"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"path/filepath"
+	"strconv"
 )
 
-var Debug bool
+type Settings struct {
+	Debug     bool
+	IndexPath string
+}
 
-func Init(debug bool) {
-	Debug = debug
+var setup Settings
+
+func Init(debug bool, indexPath string) {
+	setup.Debug = debug
+	setup.IndexPath = indexPath
 }
 
 func Home(c web.C, w http.ResponseWriter, r *http.Request) {
@@ -96,7 +104,7 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	data["JsonStr"] = string(jsonStr)
 	data["searchResults"] = searchResults
 	data["pagination"] = pagination
-	data["Debug"] = Debug
+	data["Debug"] = setup.Debug
 	data["Start"] = start[0]
 	data["End"] = end[0]
 
@@ -108,6 +116,27 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 
 func Hello(c web.C, w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, %s!", c.URLParams["name"])
+}
+
+func Examples(c web.C, w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Examples stub.")
+}
+
+func Uploads(c web.C, w http.ResponseWriter, r *http.Request) {
+	pattern := "recent-*-sra-uploads-*.tsv"
+	fullPattern := filepath.Join(setup.IndexPath, pattern)
+	file, err := utils.FindFile(fullPattern)
+
+	if err != nil {
+		render.RenderError(w, err, http.StatusNotFound)
+		return
+	}
+
+	basename := filepath.Base(file)
+	contentDisposition := fmt.Sprintf("inline; filename=\"%s\"", basename)
+	w.Header().Set("Content-Type", "text/tab-separated-values")
+	w.Header().Set("Content-Disposition", contentDisposition)
+	http.ServeFile(w, r, file)
 }
 
 func Accession(c web.C, w http.ResponseWriter, r *http.Request) {

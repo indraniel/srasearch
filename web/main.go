@@ -55,7 +55,7 @@ func (w Web) Main() {
 	routes.Include()
 
 	// Controller Settings
-	controllers.Init(w.Debug)
+	controllers.Init(w.Debug, w.IndexPath)
 
 	// Run Goji
 	w.Serve()

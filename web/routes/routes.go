@@ -11,6 +11,7 @@ func Include() {
 	goji.Get("/search", controllers.Search)
 	goji.Get("/hello/:name", controllers.Hello)
 	goji.Get("/accession/:id", controllers.Accession)
-	goji.Get("/example", controllers.Results)
+	goji.Get("/example", controllers.Examples)
+	goji.Get("/uploads", controllers.Uploads)
 	goji.NotFound(controllers.NotFound)
 }

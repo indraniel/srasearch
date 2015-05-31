@@ -1,9 +1,11 @@
 package utils
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func CheckFileExists(file string) {
@@ -35,4 +37,23 @@ func CheckWrite(f *os.File, e error) {
 	if e != nil {
 		log.Fatal("Trouble writing to '%s' : %s\n", f.Name(), e)
 	}
+}
+
+func FindFile(pattern string) (string, error) {
+	matches, err := filepath.Glob(pattern)
+	if err != nil {
+		return "", err
+	}
+
+	if len(matches) == 0 {
+		err := fmt.Errorf("Found no files with pattern : %s", pattern)
+		return "", err
+	}
+
+	if len(matches) > 1 {
+		err := fmt.Errorf("Found multiple files with pattern : %s", pattern)
+		return "", err
+	}
+
+	return matches[0], nil
 }
