@@ -61,9 +61,6 @@ func init() {
 
 func (opts IncrementDumpCmdOpts) main() {
 	opts.processOpts()
-	utils.CheckFileExists(opts.metadata)
-	utils.CheckFileExists(opts.uploads)
-	utils.CheckFileExists(opts.inputDump)
 	incrementdump.Main(opts.metadata, opts.uploads, opts.inputDump, opts.outputDump)
 }
 
@@ -95,4 +92,8 @@ func (opts IncrementDumpCmdOpts) processOpts() {
 			"to update against via --input-dump (use --help for more info) !",
 		)
 	}
+
+	utils.CheckFileExists(opts.metadata)
+	utils.CheckFileExists(opts.uploads)
+	utils.CheckFileExists(opts.inputDump)
 }

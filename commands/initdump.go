@@ -51,9 +51,7 @@ func init() {
 }
 
 func (opts InitDumpCmdOpts) main() {
-	InitDumpOpts.processOpts()
-	utils.CheckFileExists(opts.metadata)
-	utils.CheckFileExists(opts.uploads)
+	opts.processOpts()
 	initdump.Main(opts.metadata, opts.uploads, opts.output)
 }
 
@@ -78,4 +76,7 @@ func (opts InitDumpCmdOpts) processOpts() {
 			"via --uploads= !",
 		)
 	}
+
+	utils.CheckFileExists(opts.metadata)
+	utils.CheckFileExists(opts.uploads)
 }

@@ -19,8 +19,7 @@ var cmdMakeIndex = &cobra.Command{
 	Short: "Generate an search index file from a SRA Dump file",
 	Long:  `Generate an search index file from a SRA Dump file`,
 	Run: func(cmd *cobra.Command, args []string) {
-		MkIdxOpts.processOpts()
-		MkIdxOpts.mainRun()
+		MkIdxOpts.main()
 	},
 }
 
@@ -42,7 +41,8 @@ func init() {
 	)
 }
 
-func (opts MkIdxCmdOpts) mainRun() {
+func (opts MkIdxCmdOpts) main() {
+	opts.processOpts()
 	makeindex.CreateSearchIndex(opts.input, opts.output)
 }
 
@@ -55,14 +55,5 @@ func (opts MkIdxCmdOpts) processOpts() {
 		log.Fatal("Please supply an input file via --input !")
 	}
 
-	opts.checkExists(opts.input)
-}
-
-func (opts MkIdxCmdOpts) checkExists(inputfile string) {
-	if _, err := os.Stat(inputfile); os.IsNotExist(err) {
-		log.Fatalf(
-			"Could not find '%s' on file system: %s",
-			inputfile, err,
-		)
-	}
+	utils.CheckFileExists(opts.input)
 }
