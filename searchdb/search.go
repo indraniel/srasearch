@@ -41,9 +41,19 @@ func GetSRAItem(id string) (*sra.SraItem, error) {
 
 func Query(qryString, start, end string, page, querySize int) (*bleve.SearchResult, error) {
 	// setup query string
-	inputQuery := bleve.NewQueryStringQuery(qryString)
-	tsQuery := bleve.NewDateRangeQuery(&start, &end)
-	query := bleve.NewConjunctionQuery([]bleve.Query{inputQuery, tsQuery})
+	q := make([]bleve.Query, 0)
+	if qryString == "*" {
+		// Special Search Term:
+		//    Just search for everything successfully processed by
+		//    the SRA in a given time range
+		tsQuery := bleve.NewDateRangeQuery(&start, &end)
+		q = append(q, tsQuery)
+	} else {
+		inputQuery := bleve.NewQueryStringQuery(qryString)
+		tsQuery := bleve.NewDateRangeQuery(&start, &end)
+		q = append(q, inputQuery, tsQuery)
+	}
+	query := bleve.NewConjunctionQuery(q)
 
 	from := (page - 1) * querySize
 
