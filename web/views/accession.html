@@ -75,14 +75,18 @@
                                     <th scope="row">Submission</th>
                                     {{ if eq .SRAItem.SubmissionId "-" }}
                                     <td>{{.SRAItem.SubmissionId}}</td>
-                                    {{ else }}
+                                    {{ else if and .SRAItem.SubmissionId .Start .End }}
                                     <td><a href="/accession/{{.SRAItem.SubmissionId}}?start={{ .Start }}&end={{ .End }}">{{.SRAItem.SubmissionId}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.SubmissionId}}">NCBI</a></td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.SubmissionId}}">{{.SRAItem.SubmissionId}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.SubmissionId}}">NCBI</a></td>
                                     {{ end }}
                                 </tr>
                                 <tr>
                                     <th scope="row">Study</th>
                                     {{ if eq .SRAItem.Study "-" }}
                                     <td>{{.SRAItem.Study}}</td>
+                                    {{ else if and .SRAItem.Study .Start .End }}
+                                    <td><a href="/accession/{{.SRAItem.Study}}?start={{ .Start }}&end={{ .End }}">{{.SRAItem.Study}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Study}}">NCBI</a></td>
                                     {{ else }}
                                     <td><a href="/accession/{{.SRAItem.Study}}">{{.SRAItem.Study}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Study}}">NCBI</a></td>
                                     {{ end }}
@@ -99,6 +103,8 @@
                                     <th scope="row">Sample</th>
                                     {{ if eq .SRAItem.Sample "-" }}
                                     <td>{{.SRAItem.Sample}}</td>
+                                    {{ else if and .SRAItem.Sample .Start .End }}
+                                    <td><a href="/accession/{{.SRAItem.Sample}}?start={{ .Start }}&end={{ .End }}">{{.SRAItem.Sample}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Sample}}">NCBI</a></td>
                                     {{ else }}
                                     <td><a href="/accession/{{.SRAItem.Sample}}">{{.SRAItem.Sample}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Sample}}">NCBI</a></td>
                                     {{ end }}
@@ -115,6 +121,8 @@
                                     <th scope="row">Experiment</th>
                                     {{ if eq .SRAItem.Experiment "-" }}
                                     <td>{{.SRAItem.Experiment}}</td>
+                                    {{ else if and .SRAItem.Experiment .Start .End }}
+                                    <td><a href="/accession/{{.SRAItem.Experiment}}?start={{ .Start }}&end={{ .End }}">{{.SRAItem.Experiment}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Experiment}}">NCBI</a></td>
                                     {{ else }}
                                     <td><a href="/accession/{{.SRAItem.Experiment}}">{{.SRAItem.Experiment}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Experiment}}">NCBI</a></td>
                                     {{ end }}
