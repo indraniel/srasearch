@@ -182,6 +182,11 @@ func Uploads(c web.C, w http.ResponseWriter, r *http.Request) {
 func Accession(c web.C, w http.ResponseWriter, r *http.Request) {
 	accession := c.URLParams["id"]
 
+	q := r.URL.Query()
+
+	start, sOk := q["start"]
+	end, eOk := q["end"]
+
 	si, err := searchdb.GetSRAItem(accession)
 	if err != nil {
 		render.RenderError(w, err, http.StatusNotFound)
@@ -194,6 +199,11 @@ func Accession(c web.C, w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["Title"] = fmt.Sprintf("%s : %s", "Accession", accession)
 	data["SRAItem"] = si
+
+	if sOk && eOk && start[0] != "" && end[0] != "" {
+		data["Start"] = start[0]
+		data["End"] = end[0]
+	}
 
 	err = render.RenderHTML(w, templates, "base", data)
 	if err != nil {

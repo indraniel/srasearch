@@ -76,7 +76,7 @@
                                     {{ if eq .SRAItem.SubmissionId "-" }}
                                     <td>{{.SRAItem.SubmissionId}}</td>
                                     {{ else }}
-                                    <td><a href="/accession/{{.SRAItem.SubmissionId}}">{{.SRAItem.SubmissionId}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.SubmissionId}}">NCBI</a></td>
+                                    <td><a href="/accession/{{.SRAItem.SubmissionId}}?start={{ .Start }}&end={{ .End }}">{{.SRAItem.SubmissionId}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.SubmissionId}}">NCBI</a></td>
                                     {{ end }}
                                 </tr>
                                 <tr>

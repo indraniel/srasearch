@@ -101,6 +101,9 @@
                     </div>
                 </div>
                 {{ end }}
+
+                {{ $Start := .Start }}
+                {{ $End := .End }}
                 {{ $pagination := .pagination }}
                 {{ range $index, $elem := .searchResults.Hits }}
                 <div class="well search-result">
@@ -116,7 +119,7 @@
                                 </ul>
                             </div>
                             <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9 title">
-                                <h3><a href="/accession/{{.ID}}">{{ $elem.ID }}</a></h3>
+                                <h3><a href="/accession/{{.ID}}?start={{ $Start }}&end={{ $End }}">{{ $elem.ID }}</a></h3>
                                 <dl class="dl-horizontal">
                                     <dt>Alias</dt>
                                     <dd>{{ mapGet $elem.Fields "XML.Alias" }}</dt>
