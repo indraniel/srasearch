@@ -65,7 +65,7 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 
 	end, exists := q["end"]
-	if exists == false || start[0] == "" {
+	if exists == false || end[0] == "" {
 		err := fmt.Errorf("Please provide a valid end date!")
 		render.RenderError(w, err, http.StatusInternalServerError)
 		return
