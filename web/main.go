@@ -6,11 +6,12 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/hypebeast/gojistatic"
+	"github.com/hypebeast/gojistaticbin"
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/bind"
 	"github.com/zenazn/goji/graceful"
 
+	"github.com/indraniel/srasearch/assets"
 	"github.com/indraniel/srasearch/searchdb"
 	"github.com/indraniel/srasearch/web/controllers"
 	"github.com/indraniel/srasearch/web/routes"
@@ -45,9 +46,13 @@ func (w Web) Main() {
 
 	// Static files setup
 	goji.Use(
-		gojistatic.Static(
+		gojistaticbin.Staticbin(
 			"web/static",
-			gojistatic.StaticOptions{SkipLogging: false},
+			assets.Asset,
+			gojistaticbin.Options{
+				SkipLogging: false,
+				IndexFile:   "",
+			},
 		),
 	)
 

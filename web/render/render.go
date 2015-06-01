@@ -1,7 +1,9 @@
 package render
 
 import (
-	"html/template"
+	"github.com/indraniel/srasearch/assets"
+	"github.com/arschles/go-bindata-html-template"
+
 	"net/http"
 	"strconv"
 )
@@ -11,14 +13,14 @@ func RenderHTML(
 	templates []string,
 	name string,
 	data interface{}) error {
-	t := template.New(name).Funcs(funcMap)
+	t := template.New(name, assets.Asset).Funcs(funcMap)
 
 	t, err := t.ParseFiles(templates...)
 	if err != nil {
 		return err
 	}
 
-	if err = t.ExecuteTemplate(w, name, data); err != nil {
+	if err = t.Execute(w, data); err != nil {
 		return err
 	}
 

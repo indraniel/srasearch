@@ -1,7 +1,8 @@
 package render
 
 import (
-	"html/template"
+	"github.com/arschles/go-bindata-html-template"
+
 	"time"
 )
 
