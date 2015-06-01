@@ -1,0 +1,178 @@
+{{define "body"}}
+    <div class="starter-template">
+    <ol class="breadcrumb">
+    	<li>Search</li>
+        <li>Page {{ .pagination.Page }}</li>
+		<li class="pull-right"><a href="" class="text-muted"><i class="fa fa-refresh"></i></a></li>
+	</ol>
+	<div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left-align">
+                <div class="well search-result">
+                    <form id="search-form" action="/search">
+                        <div class="form-group center-align">
+                          <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                              <time id="range-start-time" datetime="{{.Start}}"></time>
+                              <time id="range-end-time" datetime="{{.End}}"></time>
+                              <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                              <span></span> <b class="caret"></b>
+                              <input id="searchStart" type="hidden" name="start" value="">
+                              <input id="searchEnd" type="hidden" name="end" value="">
+                          </div>
+                        </div>
+                        <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search" value="{{.Query}}" autofocus="autofocus">
+                          <span class="input-group-btn">
+                            <button class="btn btn-info btn-default" id="load" data-searching-text="<i class='fa fa-spinner fa-spin'></i> Search" type="button"><i class="glyphicon glyphicon-search"></i> Search</button>
+                          </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="condensed-well search-result">
+                    <div class="row">
+                        <table class="table table-condensed borderless">
+                            <thead>
+                            <tr>
+                                <th colspan=2 class="table-header center-align col-md-6 col-lg-6">Search Stats</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Search Time</th>
+                                <td class="right-align">{{.searchResults.Took}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Hits</th>
+                                <td class="right-align">{{.searchResults.Total}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Result Slice</th>
+                                <td class="right-align">{{.pagination.StartIndex}} -
+                                    {{minUint64 .pagination.EndIndex .searchResults.Total}}</td>
+                            </tr>
+                            <tr>
+                                <th colspan=2 class="table-header center-align col-md-6 col-lg-6">Facets</th>
+                            </tr>
+                            {{ range .searchResults.Facets }}
+                                {{ range .Terms }}
+                                <tr>
+                                    <th scope="row">{{pluralType .Term}}</th>
+                                    <td class="right-align">{{.Count}}</td>
+                                </tr>
+                                {{ end }}
+                            {{ end }}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{ if .searchResults.Total }}
+                <div class="condensed-well search-result">
+                    <div class="condensed-row center-align">
+                        <nav>
+                            <ul class="pagination">
+                                {{ if .pagination.HasPrev }}
+                                    <li><a href="/search?start={{.Start}}&end={{.End}}&page={{add .pagination.Page -1}}&q={{.Query}}">prev</a></li>
+                                {{ end }}
+                                {{ $pagination := .pagination }}
+                                {{ $Query := .Query }}
+                                {{ $Start := .Start }}
+                                {{ $End := .End }}
+                                {{ range $page := .pagination.IterationSet }}
+                                    {{ if eq $.pagination.Page $page }}
+                                        <li class="active"><a href="#">{{ $page }}</a></li>
+                                    {{ else if $page }}
+                                        <li><a href="/search?start={{$.Start}}&end={{$.End}}&page={{ $page }}&q={{$.Query}}">{{ $page }}</a></li>
+                                    {{ else }}
+                                        <li class="disabled"><a href="#">...</a></li>
+                                    {{ end }}
+                                {{ end }}
+                                {{ if .pagination.HasNext }}
+                                    <li><a href="/search?start={{.Start}}&end={{.End}}&page={{add .pagination.Page 1}}&q={{.Query}}">next</a></li>
+                                {{ end }}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                {{ end }}
+
+                {{ if .Debug }}
+                <div class="well search-result">
+                    <div class="row">
+                        <pre>{{.JsonStr}}</pre>
+                    </div>
+                </div>
+                {{ end }}
+
+                {{ $Start := .Start }}
+                {{ $End := .End }}
+                {{ $pagination := .pagination }}
+                {{ range $index, $elem := .searchResults.Hits }}
+                <div class="well search-result">
+                    <div class="row">
+                        <a href="#">
+                            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+                                <ul class="block">
+                                    <li class="sra {{.Fields.Type}}">
+                                        <div class="label">{{ incrementIdx $index $pagination.StartIndex}}</div>
+                                        <div class="sra-block">{{shortType $elem.Fields.Type}}</div>
+                                        <div class="label">{{$elem.Fields.Type}}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9 title">
+                                <h3><a href="/accession/{{.ID}}?start={{ $Start }}&end={{ $End }}">{{ $elem.ID }}</a></h3>
+                                <dl class="dl-horizontal">
+                                    <dt>Alias</dt>
+                                    <dd>{{ mapGet $elem.Fields "XML.Alias" }}</dt>
+                                    <dt>Submission ID</dt>
+                                    <dd>{{ mapGet $elem.Fields "SubmissionId" }}</dt>
+                                    <dt>Receive Date</dt>
+                                    <dd>{{ timeFmt $elem.Fields.Received "2006-01-02 15:04:05"}}</dt>
+                                    <dt>Visibility</dt>
+                                    <dd>{{ mapGet $elem.Fields "Visibility"}}</dt>
+                                    <dt>Description</dt>
+                                    <dd>{{ mapGet $elem.Fields "XML.Description" }}</dt>
+                                    <dt>Search Score</dt>
+                                    <dd>{{ $elem.Score }}</dt>
+                                </dl>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {{ end }}
+                <div class="row center-align">
+                    <nav>
+                        <ul class="pagination">
+                            {{ if .pagination.HasPrev }}
+                                    <li><a href="/search?start={{.Start}}&end={{.End}}&page={{add .pagination.Page -1}}&q={{.Query}}">prev</a></li>
+                            {{ end }}
+                            {{ $pagination := .pagination }}
+                            {{ $Query := .Query }}
+                            {{ $Start := .Start }}
+                            {{ $End := .End }}
+                            {{ range $page := .pagination.IterationSet }}
+                                {{ if eq $.pagination.Page $page }}
+                                    <li class="active"><a href="#">{{ $page }}</a></li>
+                                {{ else if $page }}
+                                    <li><a href="/search?start={{$.Start}}&end={{$.End}}&page={{ $page }}&q={{$.Query}}">{{ $page }}</a></li>
+                                {{ else }}
+                                    <li class="disabled"><a href="#">...</a></li>
+                                {{ end }}
+                            {{ end }}
+                            {{ if .pagination.HasNext }}
+                            <li><a href="/search?start={{.Start}}&end={{.End}}&page={{add .pagination.Page 1}}&q={{.Query}}">next</a></li>
+                            {{ end }}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+    </div>
+{{end}}
+
+{{define "javascript"}}
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/js/spinner-button.js" type="text/javascript"></script>
+<script src="/js/moment.min.js" type="text/javascript"></script>
+<script src="/js/daterangepicker.js" type="text/javascript"></script>
+<script src="/js/sra-daterange-setup.js" type="text/javascript"></script>
+{{end}}

@@ -1,0 +1,169 @@
+{{define "body"}}
+    <div class="starter-template">
+    <ol class="breadcrumb">
+    	<li>Accession</li>
+        <li><a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Id}}">{{.SRAItem.Id}}</a></li>
+		<li class="pull-right"><a href="" class="text-muted"><i class="fa fa-refresh"></i></a></li>
+	</ol>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    		<div class="well search-result">
+                <form id="search-form" action="/search">
+                    <div class="form-group center-align">
+                      <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                          <time id="range-start-time" datetime="{{.Start}}"></time>
+                          <time id="range-end-time" datetime="{{.End}}"></time>
+                          <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                          <span></span> <b class="caret"></b>
+                          <input id="searchStart" type="hidden" name="start" value="">
+                          <input id="searchEnd" type="hidden" name="end" value="">
+                      </div>
+                    </div>
+                    <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search" autofocus="autofocus">
+                      <span class="input-group-btn">
+                        <button class="btn btn-info btn-default" id="load" data-searching-text="<i class='fa fa-spinner fa-spin'></i> Search" type="button"><i class="glyphicon glyphicon-search"></i> Search</button>
+                      </span>
+                    </div>
+                </form>
+        	</div>
+            <div class="well search-result">
+            	<div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-leftheading">
+                            <h3 class="panel-lefttitle">{{.SRAItem.Id}} &nbsp;  ({{.SRAItem.Type}})</h3>
+                        </div>
+                        <div class="panel-rightbody text-left">
+                            <h3 class="section-header">Timestamps</h3>
+                            <table class="table table-hover table-condensed">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Received</th>
+                                    <td>{{.SRAItem.Received.Format "2006-01-02 15:04:05"}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Published</th>
+                                    <td>{{.SRAItem.Published.Format "2006-01-02 15:04:05"}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Updated</th>
+                                    <td>{{.SRAItem.Updated.Format "2006-01-02 15:04:05"}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <h3 class="section-header">Status &amp; Placement</h3>
+                            <table class="table table-hover table-condensed">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Status</th>
+                                    <td>{{.SRAItem.Status}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Visibility</th>
+                                    <td>{{.SRAItem.Visibility}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Issues</th>
+                                    <td>{{.SRAItem.Issues}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <h3 class="section-header">Relationships</h3>
+                            <table class="table table-hover table-condensed">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Submission</th>
+                                    {{ if eq .SRAItem.SubmissionId "-" }}
+                                    <td>{{.SRAItem.SubmissionId}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.SubmissionId}}?start={{ .Start }}&end={{ .End }}">{{.SRAItem.SubmissionId}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.SubmissionId}}">NCBI</a></td>
+                                    {{ end }}
+                                </tr>
+                                <tr>
+                                    <th scope="row">Study</th>
+                                    {{ if eq .SRAItem.Study "-" }}
+                                    <td>{{.SRAItem.Study}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.Study}}">{{.SRAItem.Study}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Study}}">NCBI</a></td>
+                                    {{ end }}
+                                </tr>
+                                <tr>
+                                    <th scope="row">BioProject</th>
+                                    {{ if eq .SRAItem.BioProject "-" }}
+                                    <td>{{.SRAItem.BioProject}}</td>
+                                    {{ else }}
+                                    <td><a href="http://www.ncbi.nlm.nih.gov/bioproject/{{.SRAItem.BioProject}}">{{.SRAItem.BioProject}}</a></td>
+                                    {{ end }}
+                                </tr>
+                                <tr>
+                                    <th scope="row">Sample</th>
+                                    {{ if eq .SRAItem.Sample "-" }}
+                                    <td>{{.SRAItem.Sample}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.Sample}}">{{.SRAItem.Sample}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Sample}}">NCBI</a></td>
+                                    {{ end }}
+                                </tr>
+                                <tr>
+                                    <th scope="row">BioSample</th>
+                                    {{ if eq .SRAItem.BioSample "-" }}
+                                    <td>{{.SRAItem.BioSample}}</td>
+                                    {{ else }}
+                                    <td><a href="http://www.ncbi.nlm.nih.gov/biosample/{{.SRAItem.BioSample}}">{{.SRAItem.BioSample}}</a></td>
+                                    {{ end }}
+                                </tr>
+                                <tr>
+                                    <th scope="row">Experiment</th>
+                                    {{ if eq .SRAItem.Experiment "-" }}
+                                    <td>{{.SRAItem.Experiment}}</td>
+                                    {{ else }}
+                                    <td><a href="/accession/{{.SRAItem.Experiment}}">{{.SRAItem.Experiment}}</a> / <a href="http://ncbi.nlm.nih.gov/sra/{{.SRAItem.Experiment}}">NCBI</a></td>
+                                    {{ end }}
+                                </tr>
+                                <tr>
+                                    <th scope="row">Alias</th>
+                                    {{ if eq .SRAItem.Alias "-" }}
+                                    <td>{{.SRAItem.Alias}}</td>
+                                    {{ else }}
+                                    <td><a href="https://imp-lims.gsc.wustl.edu/entity/{{.SRAItem.IMPEntityType}}/{{.SRAItem.Alias}}">{{.SRAItem.Alias}}</a></td>
+                                    {{ end }}
+                                </tr>
+                            </tbody>
+                            </table>
+                            <h3 class="section-header">XML</h3>
+                            <table class="table table-hover table-condensed">
+                            <tbody>
+                                {{ if len .SRAItem.SubmitFiles }}
+                                <tr>
+                                    <th scope="row">Original Submission Files</th>
+                                    <td>{{.SRAItem.SubmitFiles}}</td>
+                                </tr>
+                                {{ end }}
+                                <tr>
+                                    <th scope="row">File Name</th>
+                                    <td>{{.SRAItem.XMLFileName}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">MD5</th>
+                                    <td>{{.SRAItem.MD5}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <pre>{{ .SRAItem.XML.XMLString }}</pre>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                    </div>
+            	</div>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "javascript"}}
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/js/spinner-button.js" type="text/javascript"></script>
+<script src="/js/moment.min.js" type="text/javascript"></script>
+<script src="/js/daterangepicker.js" type="text/javascript"></script>
+<script src="/js/sra-daterange-setup.js" type="text/javascript"></script>
+{{end}}

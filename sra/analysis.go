@@ -73,3 +73,8 @@ func (sa SraAnalysis) XMLString() string {
 func (sa SraAnalysis) GetAccession() string {
 	return sa.Accession.String()
 }
+
+/* MGI specific */
+func (sa SraAnalysis) IMPType() string {
+	return "sra-analysis"
+}
