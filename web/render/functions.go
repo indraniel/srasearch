@@ -13,11 +13,11 @@ func init() {
 		"add":          Add,
 		"mapGet":       MapGet,
 		"timeFmt":      TimeFmt,
-		"safeHTML":     SafeHTML,
 		"incrementIdx": IncrementIndex,
 		"shortType":    ShortType,
 		"minUint64":    MinUint64,
 		"pluralType":   PluralType,
+		//		"safeHTML":     SafeHTML,
 	}
 }
 
@@ -90,9 +90,9 @@ func TimeFmt(ts, fmt string) string {
 	return t.Format(fmt)
 }
 
-func SafeHTML(text string) template.HTML {
-	return template.HTML(text)
-}
+// func SafeHTML(text string) template.HTML {
+// 	return template.HTML(text)
+// }
 
 func MapGet(m map[string]interface{}, key string) string {
 	if val, ok := m[key]; ok {
