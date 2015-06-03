@@ -67,7 +67,7 @@ In this example, we've placed the last recent 4000 uploads (from May 3, 2015) as
 
 ### NOTES
 
-`srasearch` is using the [bleve][3] text indexing library for the underlying search engine.
+`srasearch` is using the [bleve][3] text indexing library for the underlying search engine.  [BoltDB][5] is being used for bleve's underlying key/value store.
 
 ### LICENSE
 
@@ -77,3 +77,4 @@ ISC
 [2]: http://www.ncbi.nlm.nih.gov/books/NBK242623/#SRA_Submission_Telemetry_BK.Batch_Teleme
 [3]: https://github.com/blevesearch/bleve
 [4]: http://genome.wustl.edu
+[5]: https://github.com/boltdb/bolt
