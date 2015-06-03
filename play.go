@@ -1,5 +1,8 @@
 package main
 
+// this is just a scratch space on learning how bleve works and how data
+// structures are stored and rendered.
+
 import (
 	"github.com/indraniel/srasearch/sra"
 	"encoding/json"
