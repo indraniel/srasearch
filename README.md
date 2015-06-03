@@ -10,10 +10,29 @@ This utility processes those telemetry files and presents that data through a "G
 
 Assuming that you've setup a [proper Go development workspace][1], try the following:
 
-    $ go get -d github.com/indraniel/srasearch
-    $ cd $GOPATH/src/github.com/indraniel/srasearch
-    $ make prepare
-    $ make 
+### Setup a Go workspace
+
+Initialize a [proper Go development workspace][1]:
+
+    mkdir /path/to/project
+    cd /path/to/project
+    export GOPATH=$PWD
+    export GOROOT=$(go env GOROOT)
+
+Setup the git repository:
+
+    mkdir -p $GOPATH/src/github.com/indraniel/
+    cd $GOPATH/src/github.com/indraniel/
+    git clone git@github.com:indraniel/srasearch.git
+    cd srasearch/
+
+### Initialize the depdencies
+
+    make prepare
+
+### Build the app
+
+    make
 
 You should now see a `srasearch` executable inside the `$GOPATH/src/github.com/indraniel/srasearch` directory.  You can move that file to wherever you please.
 
@@ -71,6 +90,8 @@ _This file is generally placed within a search index directory.  It provides the
 
 `srasearch` is using the [bleve][3] text indexing library for the underlying search engine.  [BoltDB][5] is being used for bleve's underlying key/value store.
 
+All the dependecies to this app are stored within this repository and are managed by [godep][6].
+
 ## LICENSE
 
 ISC
@@ -80,3 +101,4 @@ ISC
 [3]: https://github.com/blevesearch/bleve
 [4]: http://genome.wustl.edu
 [5]: https://github.com/boltdb/bolt
+[6]: https://github.com/tools/godep
