@@ -3,29 +3,38 @@
 # General Guidelines
 
 1.  Queries have to be at least 6 characters long.
+2.  Generally, the smaller the date range, the faster the search.
+3.  All queries have a 1 minute timeout limit to protect the web server from being overloaded.
     
-    For example, if you wanted to search for [HDF5][1] files `.h5` (PacBio data) that's been submitted try this:
-
-        SubmitFile:bas.h5      # works
-        
-        SubmitFiles:*.h5       # DOES NOT WORK
-        SubmitFiles:.h5        # DOES NOT WORK
-        SubmitFiles:*as.h5     # DOES NOT WORK
-
-2.  The narrower the date range, the faster the search.
-3.  All queries have a 1 minute timeout limit.
-    
-    This is done to keep the web server from overloading.  If you hit the timeout limit, you'll need to either:
+    If you hit the timeout limit, you'll need to either:
 
     * narrow the time range
-    * refine your query to make it more specific
+    * refine your query
     * use other information channels outside of this tool
     
-4.  The special query string `*` (a star by itself) will return all the NCBI processed data for the given time range.  **Don't make the time range too large, or you'll break things!**
+4.  The special query string `*` (a star by itself) will return all the NCBI processed data for the given time range.
 
-## Query Language
+# Handy Examples
 
-_**Caveat Emptor:** The query language is primitive, doesn't have a lot of features, and sometimes has odd behavior.  Hopefully this will improve over time._
+### Get all the SRA runs for a given time range
+
+    Type:runs
+
+### Search for particular accession
+
+    SRP022907
+
+### Search for a dbGaP project
+
+    phs000159 +Type:analysis
+
+### Search for a experiments associated with a BioProject
+
+    BioProject:PRJNA196921 +Type:experiment
+
+# Query Language
+
+_**Caveat Emptor:** The query language is primitive, and sometimes has odd behavior.  Hopefully this will improve over time._
 
 ### Terms
 
@@ -80,9 +89,11 @@ will perform Match queries for "phs000159", but XML documents having a Instrumen
 
 #  <a name="fields"></a> Available Fields
 
+Below are the list of available fields with some example values.
+
 ## Common
 
-These are fields (with example values) that are common across all SRA Types (Submission, Study, Sample, Experiment, Run, Analysis):
+These are fields are common across all SRA Types (Submission, Study, Sample, Experiment, Run, Analysis):
 
 ```
 Alias: "OBAB-Bubba-Testes1",
@@ -100,33 +111,282 @@ Type: "experiment",
 Visibility: "public",
 XMLFileName: "SRS123456.sample.xml"
 SubmitFiles: 123456789_merged_rmdup.bam
+XML.Accession: "SRX1234567",
+XML.Alias: "123456",
+XML.BrokerName: "",
+XML.Title: "Reference alignment of BioSample sample SAMN02205338",
+XML.XMLName.Local: "",
+XML.XMLName.Space: "",
 ```
 
-## Specialized
+## Specialized XML Fields
 
 ### Submission
 
-Coming Soon!
+```
+XML.Actions.Actions.Add.Schema: [ "analysis", "run", "run", "experiment", "run" ],
+XML.Actions.Actions.Add.Source: [ "H_UK-1234-5046_dbgap_1.analysis.xml", "H_UK-1234-5046_dbgap_1.run.xml", "123456.run.xml", "123456.experiment.xml", "123456.run.xml" ],
+XML.Contacts.Contacts.InformOnError: "mailto:lims@genome.wustl.edu",
+XML.Contacts.Contacts.InformOnStatus: "mailto:lims@genome.wustl.edu",
+XML.Contacts.Contacts.Name: "LIMS",
+XML.Identifiers.PrimaryId.Label: "",
+XML.Identifiers.PrimaryId.SubmitterId: "SRA265381",
+XML.Identifiers.SubmitterIds.Label: "",
+XML.Identifiers.SubmitterIds.Namespace: "WUGSC",
+XML.Identifiers.SubmitterIds.SubmitterId: "98679",
+XML.LabName: "",
+XML.SubmissionComment: "",
+XML.SubmissionDate: "",
+XML.Title: "Opsanus beta whole genome sequence",
+XML.XMLName.Local: "SUBMISSION",
+```
 
 ### Study
 
-Coming Soon!
+```
+XML.CenterName: "BioProject",
+XML.Descriptor.CenterName: "",
+XML.Descriptor.CenterProjectName: "human metagenome",
+XML.Descriptor.StudyAbstract: "Metagenomics and viral capture from clinical samples",
+XML.Descriptor.StudyDescription: "",
+XML.Descriptor.StudyTitle: "ViroCap testing",
+XML.Descriptor.StudyType.ExistingStudyType: "Metagenomics",
+XML.Descriptor.StudyType.NewStudyType: "",
+XML.Identifiers.ExternalIds.Label: "",
+XML.Identifiers.ExternalIds.Namespace: "BioProject",
+XML.Identifiers.ExternalIds.SubmitterId: "PRJNA273884",
+XML.Identifiers.PrimaryId.Label: "",
+XML.Identifiers.PrimaryId.SubmitterId: "SRP053006",
+XML.XMLName.Local: "",
+XML.XMLName.Space: "",
+```
 
 ### Sample
 
-Coming Soon!
+```
+XML.CenterName": "The Genome Institute at Washington University School of Medicine",
+XML.Description: "DNA was extracted from the testes of \"Bubba\": male, 220 g, captured near Panacea, Florida by Gulf Specimen Company.",
+XML.Identifiers.ExternalIds.Label: "",
+XML.Identifiers.ExternalIds.Namespace: "BioSample",
+XML.Identifiers.ExternalIds.SubmitterId: "SAMN03003653",
+XML.Identifiers.PrimaryId.Label: "",
+XML.Identifiers.PrimaryId.SubmitterId: "SRS941784",
+XML.Identifiers.SubmitterIds.Label: "",
+XML.Identifiers.SubmitterIds.Namespace: "The Genome Institute at Washington University School of Medicine",
+XML.Identifiers.SubmitterIds.SubmitterId: "OBAB-Bubba-Testes",
+XML.SampleAttributes.SampleAttributes.Tag: [
+    "isolate",
+    "collection_date",
+    "env_biome",
+    "env_feature",
+    "env_material",
+    "estimated_size",
+    "geo_loc_name",
+    "isol_growth_condt",
+    "lat_lon",
+    "num_replicons",
+    "ploidy",
+    "propagation",
+    "tissue",
+    "BioSampleModel"
+],
+XML.SampleAttributes.SampleAttributes.Units: [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+],
+XML.SampleAttributes.SampleAttributes.Value: [
+    "Bubba",
+    "unspecified",
+    "unspecified",
+    "unspecified",
+    "unspecified",
+    "3200000000",
+    "unspecified",
+    "unspecified",
+    "unspecified",
+    "unspecified",
+    "unspecified",
+    "unspecified",
+    "testes",
+    "MIGS.eu"
+],
+XML.SampleLinks.SampleLinks.XrefLink.Db: [
+    "biosample",
+    "bioproject"
+],
+XML.SampleLinks.SampleLinks.XrefLink.Id: [
+    "3003653",
+    "196921"
+],
+XML.SampleLinks.SampleLinks.XrefLink.Label: [
+    "SAMN03003653",
+    "PRJNA196921"
+],
+XML.SampleName.AnonymizedName: "",
+XML.SampleName.CommonName: "",
+XML.SampleName.IndividualName: "",
+XML.SampleName.ScientificName: "Opsanus beta",
+XML.SampleName.TaxonId: 95145,
+```
 
 ### Experiment
 
-Coming Soon!
+```
+XML.Design.DesignDescription: "Illumina sequencing of phs000752 2894053885 paired end WXS library",
+XML.Design.LibraryDescriptor.LibraryConstructionProtocol: "",
+XML.Design.LibraryDescriptor.LibraryLayout.Paired.NominalLength: 360,
+XML.Design.LibraryDescriptor.LibraryLayout.Paired.NominalSdev: 0,
+XML.Design.LibraryDescriptor.LibraryName: "2895057932",
+XML.Design.LibraryDescriptor.LibrarySelection: "unspecified",
+XML.Design.LibraryDescriptor.LibrarySource: "GENOMIC",
+XML.Design.LibraryDescriptor.LibraryStrategy: "WXS",
+XML.Design.LibraryDescriptor.PoolingStrategy: "",
+XML.Design.SampleDescriptor.Accession: "SRS926646",
+XML.Design.SampleDescriptor.Identifiers.ExternalIds.Label: "",
+XML.Design.SampleDescriptor.Identifiers.ExternalIds.Namespace: "phs000752",
+XML.Design.SampleDescriptor.Identifiers.ExternalIds.SubmitterId: "H_UK-12345-67890",
+XML.Design.SampleDescriptor.Identifiers.PrimaryId.Label: "",
+XML.Design.SampleDescriptor.Identifiers.PrimaryId.SubmitterId: "SRS123456",
+XML.Design.SampleDescriptor.Refcenter: "",
+XML.Design.SampleDescriptor.Refname: "",
+XML.Design.SpotDescriptor.SpotDecodeSpec.ReadSpecs.BaseCoord: [
+    1,
+    126
+],
+XML.Design.SpotDescriptor.SpotDecodeSpec.ReadSpecs.ReadClass: [
+    "Application Read",
+    "Application Read"
+],
+XML.Design.SpotDescriptor.SpotDecodeSpec.ReadSpecs.ReadIndex: [
+    0,
+    1
+],
+XML.Design.SpotDescriptor.SpotDecodeSpec.ReadSpecs.ReadLabel: [
+    "",
+    ""
+],
+XML.Design.SpotDescriptor.SpotDecodeSpec.ReadSpecs.ReadType: [
+    "Forward",
+    "Reverse"
+],
+XML.Design.SpotDescriptor.SpotDecodeSpec.SpotLength: 250,
+XML.Identifiers.PrimaryId.Label: "",
+XML.Identifiers.PrimaryId.SubmitterId: "SRX1234567",
+XML.Identifiers.SubmitterIds.Label: "",
+XML.Identifiers.SubmitterIds.Namespace: "WUGSC",
+XML.Identifiers.SubmitterIds.SubmitterId: "481432",
+XML.Platform.Illumina.InstrumentModel: "Illumina HiSeq 2500",
+XML.StudyRef.Accession: "SRP049071",
+XML.StudyRef.Identifiers.ExternalIds.Label: "",
+XML.StudyRef.Identifiers.ExternalIds.Namespace: "dbgap",
+XML.StudyRef.Identifiers.ExternalIds.SubmitterId: "phs000752",
+XML.StudyRef.Identifiers.PrimaryId.Label: "",
+XML.StudyRef.Identifiers.PrimaryId.SubmitterId: "SRP049071",
+XML.StudyRef.Refcenter: "",
+XML.StudyRef.Refname: "",
+```
 
 ### Run
 
-Coming Soon!
+```
+XML.DataBlocks.Files.Files.AsciiOffset: "",
+XML.DataBlocks.Files.Files.Checksum: "b975c07f850b8b9786d650585644b376",
+XML.DataBlocks.Files.Files.ChecksumMethod: "MD5",
+XML.DataBlocks.Files.Files.Filename: "gerald_C16A6ACXX_2_ATCACG.bam",
+XML.DataBlocks.Files.Files.Filetype: "bam",
+XML.DataBlocks.Files.Files.QualityEncoding: "",
+XML.DataBlocks.Files.Files.QualityScoringSystem: "",
+XML.DataBlocks.MemberName: "",
+XML.ExperimentRef.Accession: "SRX1034286",
+XML.ExperimentRef.Refcenter: "",
+XML.ExperimentRef.Refname: "",
+XML.Identifiers.PrimaryId.Label: "",
+XML.Identifiers.PrimaryId.SubmitterId: "SRR2034252",
+XML.Identifiers.SubmitterIds.Label: "",
+XML.Identifiers.SubmitterIds.Namespace: "WUGSC",
+XML.Identifiers.SubmitterIds.SubmitterId: "Pooled_DNA_2888244747_C16A6ACXX_2_ATCACG",
+XML.RunCenter: "",
+XML.RunDate: "",
+```
 
 ### Analysis
 
-Coming Soon!
+```
+XML.AnalysisCenter: "",
+XML.AnalysisDate: "",
+XML.AnalysisType.ReferenceAlignment.Assembly.Standard.ShortName": "CHM1-human-build1.1",
+XML.AnalysisType.ReferenceAlignment.Processing.Pipeline.PipeSections.Notes": [
+    "bwa aln -t4 -q 5; bwa sampe  -a 341 ",
+],
+"XML.AnalysisType.ReferenceAlignment.Processing.Pipeline.PipeSections.PrevStepIndexs": [
+    "NULL",
+],
+"XML.AnalysisType.ReferenceAlignment.Processing.Pipeline.PipeSections.Program": [
+    "bwa",
+],
+"XML.AnalysisType.ReferenceAlignment.Processing.Pipeline.PipeSections.SectionName": [
+    "",
+],
+"XML.AnalysisType.ReferenceAlignment.Processing.Pipeline.PipeSections.StepIndex": [
+    "2864077956",
+],
+"XML.AnalysisType.ReferenceAlignment.Processing.Pipeline.PipeSections.Version": [
+    "0.5.9",
+],
+"XML.AnalysisType.ReferenceAlignment.RunLabels.Runs.Accession": [
+    "SRR1927267",
+],
+"XML.AnalysisType.ReferenceAlignment.RunLabels.Runs.DataBlockName": [
+    "",
+],
+"XML.AnalysisType.ReferenceAlignment.RunLabels.Runs.ReadGroupLabel": [
+    "2864077956",
+],
+"XML.AnalysisType.ReferenceAlignment.RunLabels.Runs.Refcenter": [
+    "WUGSC",
+],
+"XML.AnalysisType.ReferenceAlignment.RunLabels.Runs.Refname": [
+    "463398",
+],
+XML.BrokerName: "",
+XML.CenterName: "WUGSC",
+XML.DataBlocks.Files.Files.Checksum: "070b28c9b6ab0412505643c65f6a202c",
+XML.DataBlocks.Files.Files.ChecksumMethod: "MD5",
+XML.DataBlocks.Files.Files.Filename: "139916889.bam",
+XML.DataBlocks.Files.Files.Filetype: "bam",
+XML.DataBlocks.Member: "",
+XML.DataBlocks.Name: "",
+XML.DataBlocks.Serial: 0,
+XML.Description: "CHM1-human-build1.1 reference alignment of sample H_HF-100622_CHM1htert_3A_Tube1",
+XML.Identifiers.PrimaryId.Label: "",
+XML.Identifiers.PrimaryId.SubmitterId: "SRZ096369",
+XML.Identifiers.SubmitterIds.Label: "",
+XML.Identifiers.SubmitterIds.Namespace: "WUGSC",
+XML.Identifiers.SubmitterIds.SubmitterId: "SAMN02205338_BioProject_2",
+XML.StudyRef.Accession: "SRP017546",
+XML.StudyRef.Identifiers.ExternalIds.Label: "",
+XML.StudyRef.Identifiers.ExternalIds.Namespace: "BioProject",
+XML.StudyRef.Identifiers.ExternalIds.SubmitterId: "PRJNA176729",
+XML.StudyRef.Identifiers.PrimaryId.Label: "",
+XML.StudyRef.Identifiers.PrimaryId.SubmitterId: "SRP017546",
+XML.StudyRef.Refcenter: "",
+XML.StudyRef.Refname: "",
+XML.Targets.Identifierses.ExternalIds.Label: "",
+XML.Targets.Identifierses.ExternalIds.Namespace: "BioSample",
+XML.Targets.Identifierses.ExternalIds.SubmitterId: "SAMN02205338",
+```
 
 [1]: http://en.wikipedia.org/wiki/Hierarchical_Data_Format
 </xmp>
