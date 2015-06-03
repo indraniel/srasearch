@@ -67,11 +67,11 @@ _This file is generally placed within a search index directory.  It provides the
 
     srasearch web --host="0.0.0.0" --port=9999 --index-path="/path/to/db/srasearch0503.idx"
 
-### NOTES
+## NOTES
 
 `srasearch` is using the [bleve][3] text indexing library for the underlying search engine.  [BoltDB][5] is being used for bleve's underlying key/value store.
 
-### LICENSE
+## LICENSE
 
 ISC
 
