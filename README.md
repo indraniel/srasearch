@@ -61,6 +61,8 @@ This sub-command creates an abbreviated "recent uploads" TSV file:
     
 In this example, we've placed the last recent 4000 uploads (from May 3, 2015) as a file inside the primary search index database directory called `/path/to/db/srasearch0503.idx/recent-4000-sra-uploads-20150523.tsv`.
 
+_This file is generally placed within a search index directory.  It provides the data for the "Recent Uploads" link in the web app._
+
 ### Start up the web app
 
     srasearch web --host="0.0.0.0" --port=9999 --index-path="/path/to/db/srasearch0503.idx"
