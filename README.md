@@ -8,6 +8,8 @@ This utility processes those telemetry files and presents that data through a "G
 
 ## BUILDING
 
+_The instructions assume that you have access to [Go][7] compiler._
+
 ### Setup a Go workspace
 
 Initialize a [proper Go development workspace][1]:
@@ -100,3 +102,4 @@ ISC
 [4]: http://genome.wustl.edu
 [5]: https://github.com/boltdb/bolt
 [6]: https://github.com/tools/godep
+[7]: https://golang.org/doc/install
