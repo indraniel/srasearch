@@ -8,7 +8,7 @@ This utility processes those telemetry files and presents that data through a "G
 
 ## BUILDING
 
-_The instructions assume that you have access to [Go][7] compiler._
+_The instructions assume that you have access to a [Go][7] compiler._
 
 ### Setup a Go workspace
 
