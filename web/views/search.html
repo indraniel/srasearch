@@ -129,6 +129,8 @@
                                     <dd>{{ timeFmt $elem.Fields.Received "2006-01-02 15:04:05"}}</dt>
                                     <dt>Visibility</dt>
                                     <dd>{{ mapGet $elem.Fields "Visibility"}}</dt>
+                                    <dt>Title</dt>
+                                    <dd>{{ mapGet $elem.Fields "XML.Title" }}</dt>
                                     <dt>Description</dt>
                                     <dd>{{ mapGet $elem.Fields "XML.Description" }}</dt>
                                     <dt>Search Score</dt>
