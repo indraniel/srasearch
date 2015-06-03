@@ -8,8 +8,6 @@ This utility processes those telemetry files and presents that data through a "G
 
 ## BUILDING
 
-Assuming that you've setup a [proper Go development workspace][1], try the following:
-
 ### Setup a Go workspace
 
 Initialize a [proper Go development workspace][1]:
