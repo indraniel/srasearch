@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 type Settings struct {
@@ -79,9 +80,10 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 		pageNum, _ = strconv.Atoi(page[0])
 	}
 
+	sanitizedQuery := strings.TrimSpace(query[0])
 
 	searchResults, err := searchdb.Query(
-		query[0],
+		sanitizedQuery,
 		start[0],
 		end[0],
 		pageNum,
@@ -100,7 +102,7 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 
 	data := make(map[string]interface{})
 	data["Title"] = "Beaker Search"
-	data["Query"] = query[0]
+	data["Query"] = sanitizedQuery
 	data["JsonStr"] = string(jsonStr)
 	data["searchResults"] = searchResults
 	data["pagination"] = pagination
