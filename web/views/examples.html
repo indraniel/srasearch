@@ -1,8 +1,134 @@
 {{define "body"}}
 <xmp style="display:none;">
-# Examples
+# General Guidelines
+
+1.  Queries have to be at least 6 characters long.
+    
+    For example, if you wanted to search for [HDF5][1] files `.h5` (PacBio data) that's been submitted try this:
+
+        SubmitFile:bas.h5      # works
+        
+        SubmitFiles:*.h5       # DOES NOT WORK
+        SubmitFiles:.h5        # DOES NOT WORK
+        SubmitFiles:*as.h5     # DOES NOT WORK
+
+2.  The narrower the date range, the faster the search.
+3.  All queries have a 1 minute timeout limit.
+    
+    This is done to keep the web server from overloading.  If you hit the timeout limit, you'll need to either:
+
+    * narrow the time range
+    * refine your query to make it more specific
+    * use other information channels outside of this tool
+    
+4.  The special query string `*` (a star by itself) will return all the NCBI processed data for the given time range.  **Don't make the time range too large, or you'll break things!**
+
+## Query Language
+
+_**Caveat Emptor:** The query language is primitive, doesn't have a lot of features, and sometimes has odd behavior.  Hopefully this will improve over time._
+
+### Terms
+
+Plain terms without any other syntax are interpreted as a match query for the term.
+
+Example: `phs000159` will perform a match query against all the fields for the term `phs000159`.
+
+### Phrases
+
+Phrase queries can be accomplished by placing the phrase in quotes.
+
+Example: "Opsanus beta Genome Sequencing" will search for the whole phrase "Opsanus beta Genome Sequencing"
+
+### Field Scoping
+
+You can qualify the field for more refined searches by prefixing them with the name of a search field separated by a colon.
+
+Example: "Alias:Opsanus_beta_Pooled_DNA_2888244747" will perform a term query on the "Alias" field only. 
+
+See [Available Fields](#fields) for fields that are curently available to search on.
+
+### Booleans
+
+Prefixing a search term with a `+` or `-` places that term with a respective "MUST" or "MUST NOT" on that query.
+
+Example: `Opsanus +Type:experiment -Alias:Opsanus_beta_Pooled_DNA_2888244747`
+
+The above example will search for items that contain the term "Opsanus" have MUST be of type "experiment", and MUST NOT have an Alias of "Opsanus_beta_Pooled_DNA_2888244747".
+
+#### Common Selection Refinements
+
+    foo +Type:submission  # a search for "foo", but limit to only submission items
+    foo +Type:study       # a search for "foo", but limit to only study      items
+    foo +Type:sample      # a search for "foo", but limit to only sample     items
+    foo +Type:experiment  # a search for "foo", but limit to only experiment items
+    foo +Type:run         # a search for "foo", but limit to only run        items
+    foo +Type:analysis    # a search for "foo", but limit to only run        items
+
+Unforunately, refinements to multiple types, like `foo +Type:experiment,run`, doesn't work yet.
+
+### Boosting
+
+Unfortunately, there isn't too much control on how the order of the search results come back.  It's largely determined by the whims of the underlying search engine algorithm.
+
+However, you can influence the relative importance of the clauses by suffixing clauses with the `^` operator followed by a number.
+
+Example: 
+
+    phs000159 XML.Platform.Illumina.InstrumentModel:"Illumina Genome Analyzer II"^5 XML.Design.LibraryDescriptor.LibrarySource:GENOMIC^3
+
+will perform Match queries for "phs000159", but XML documents having a InstrumentModel of "Illumina Genome Analyzer II" and with a LibrarySource of "GENOMIC" will score better, and appear higher in the overall results list.
+
+#  <a name="fields"></a> Available Fields
+
+## Common
+
+These are fields (with example values) that are common across all SRA Types (Submission, Study, Sample, Experiment, Run, Analysis):
+
+```
+Alias: "OBAB-Bubba-Testes1",
+BioProject: "PRJNA196921",
+BioSample: "SAMN03003653",
+Experiment: "-",
+Id: "SRX1035154",
+Issues: "-",
+MD5: "1a70563fc2a1ecd6955d4d5f36e2d5ee",
+Sample: "SRS941784",
+Status: "live",
+Study: "SRP022907",
+SubmissionId: "SRA269185",
+Type: "experiment",
+Visibility: "public",
+XMLFileName: "SRS123456.sample.xml"
+SubmitFiles: 123456789_merged_rmdup.bam
+```
+
+## Specialized
+
+### Submission
 
 Coming Soon!
+
+### Study
+
+Coming Soon!
+
+### Sample
+
+Coming Soon!
+
+### Experiment
+
+Coming Soon!
+
+### Run
+
+Coming Soon!
+
+### Analysis
+
+Coming Soon!
+
+[1]: http://en.wikipedia.org/wiki/Hierarchical_Data_Format
 </xmp>
 
 <div id="example-content">
