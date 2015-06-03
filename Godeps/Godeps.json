@@ -1,0 +1,113 @@
+{
+	"ImportPath": "bitbucket.org/idas/srasearch",
+	"GoVersion": "go1.4.1",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/arschles/go-bindata-html-template",
+			"Rev": "095fc4f87f45324bb0a0744de98b56101fa859e5"
+		},
+		{
+			"ImportPath": "github.com/blevesearch/bleve",
+			"Rev": "4ef34e1b287402474146faab62f24c00bd3d84cf"
+		},
+		{
+			"ImportPath": "github.com/blevesearch/go-porterstemmer",
+			"Comment": "v1.0.1-9-g23a2c8e",
+			"Rev": "23a2c8e5cf1f380f27722c6d2ae8896431dc7d0e"
+		},
+		{
+			"ImportPath": "github.com/blevesearch/segment",
+			"Rev": "9588637ce3caba8516208ccc17193ddedd741418"
+		},
+		{
+			"ImportPath": "github.com/boltdb/bolt",
+			"Comment": "v1.0-45-g97a7112",
+			"Rev": "97a71126e78612cb9f05b635959284f86533670d"
+		},
+		{
+			"ImportPath": "github.com/cznic/b",
+			"Rev": "c4adf3a58579a2d57cd3097f455dcdf75edcdfd8"
+		},
+		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "c22ae3cf020a21ebb7ae566dccbe90fc8ea4f9ea"
+		},
+		{
+			"ImportPath": "github.com/hypebeast/gojistaticbin",
+			"Rev": "6bec6fdf0e5d834280647f7856fbfb6c99aca0b4"
+		},
+		{
+			"ImportPath": "github.com/indraniel/go-sra-schemas-1.5/SRA.analysis.xsd_go",
+			"Rev": "3a33b1b0a2c28c5274704cc1714f3e16ec69c4c7"
+		},
+		{
+			"ImportPath": "github.com/indraniel/go-sra-schemas-1.5/SRA.experiment.xsd_go",
+			"Rev": "3a33b1b0a2c28c5274704cc1714f3e16ec69c4c7"
+		},
+		{
+			"ImportPath": "github.com/indraniel/go-sra-schemas-1.5/SRA.run.xsd_go",
+			"Rev": "3a33b1b0a2c28c5274704cc1714f3e16ec69c4c7"
+		},
+		{
+			"ImportPath": "github.com/indraniel/go-sra-schemas-1.5/SRA.sample.xsd_go",
+			"Rev": "3a33b1b0a2c28c5274704cc1714f3e16ec69c4c7"
+		},
+		{
+			"ImportPath": "github.com/indraniel/go-sra-schemas-1.5/SRA.study.xsd_go",
+			"Rev": "3a33b1b0a2c28c5274704cc1714f3e16ec69c4c7"
+		},
+		{
+			"ImportPath": "github.com/indraniel/go-sra-schemas-1.5/SRA.submission.xsd_go",
+			"Rev": "3a33b1b0a2c28c5274704cc1714f3e16ec69c4c7"
+		},
+		{
+			"ImportPath": "github.com/metaleap/go-xsd/types",
+			"Rev": "9f0dd6c4fa485ec47b03e47d3d1b30f015b4ad17"
+		},
+		{
+			"ImportPath": "github.com/ryszard/goskiplist/skiplist",
+			"Rev": "2dfbae5fcf46374f166f8969cb07e167f1be6273"
+		},
+		{
+			"ImportPath": "github.com/spf13/cobra",
+			"Rev": "f8e1ec56bdd7494d309c69681267859a6bfb7549"
+		},
+		{
+			"ImportPath": "github.com/spf13/pflag",
+			"Rev": "370c3171201099fa6b466db45c8a032cbce33d8d"
+		},
+		{
+			"ImportPath": "github.com/steveyen/gtreap",
+			"Rev": "2e5a6407ab83bf2f251d51118c21366d8e5ea619"
+		},
+		{
+			"ImportPath": "github.com/syndtr/goleveldb/leveldb",
+			"Rev": "87e4e645d80ae9c537e8f2dee52b28036a5dd75e"
+		},
+		{
+			"ImportPath": "github.com/syndtr/gosnappy/snappy",
+			"Rev": "156a073208e131d7d2e212cb749feae7c339e846"
+		},
+		{
+			"ImportPath": "github.com/willf/bitset",
+			"Comment": "v1.0.0-13-g186ebe2",
+			"Rev": "186ebe27e5f685c9914618d556e47ae093905613"
+		},
+		{
+			"ImportPath": "github.com/zenazn/goji",
+			"Comment": "v0.9.0-15-g0276f3f",
+			"Rev": "0276f3f3fb609aabf8d9ba7aea10c80ec979989d"
+		},
+		{
+			"ImportPath": "golang.org/x/text/transform",
+			"Rev": "cc9d297a7daa11dd5c6d509d77024c614ae74357"
+		},
+		{
+			"ImportPath": "golang.org/x/text/unicode/norm",
+			"Rev": "cc9d297a7daa11dd5c6d509d77024c614ae74357"
+		}
+	]
+}
