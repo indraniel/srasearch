@@ -79,10 +79,6 @@ func Search(c web.C, w http.ResponseWriter, r *http.Request) {
 		pageNum, _ = strconv.Atoi(page[0])
 	}
 
-	fmt.Println("SearchStr:", query[0])
-	fmt.Println("Start:", start[0])
-	fmt.Println("End:", end[0])
-	fmt.Println("Page:", pageNum)
 
 	searchResults, err := searchdb.Query(
 		query[0],
