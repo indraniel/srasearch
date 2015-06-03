@@ -1,7 +1,8 @@
 .PHONY: check-env prepare clean
 
-# srasearch version
-DEBVERSION := 0.1.0
+# debian
+DEB_BUILD_DIR := "deb-build"
+DEB_RELEASE_VERSION := "1"
 
 SOURCES=$(wilcard  *.go **/*.go **/**/*.go)
 GODEP := $(GOPATH)/bin/godep
@@ -46,24 +47,24 @@ clean:
 	if [ -e srasearch-dev ]; then rm srasearch-dev; fi;
 	if [ -e srasearch ]; then rm srasearch; fi;
 	if [ -e assets/assets.go ]; then rm -rf assets; fi;
-	if [ -d build ]; then rm -rf build; fi;
+	if [ -d $(DEB_BUILD_DIR) ]; then rm -rf $(DEB_BUILD_DIR); fi;
 
 # only meant to be invoked on a Linux/Debian based system
 debian: srasearch
-	test -d build || mkdir build
-	echo 2.0 > build/debian-binary
-	echo "Package: srasearch" > build/control
-	echo "Version: 1.0-${DEBVERSION}" >> build/control
-	echo "Architecture: amd64" >> build/control
-	echo "Section: science" >> build/control
-	echo "Maintainer: indraniel <indraniel@gmail.com>" >> build/control
-	echo "Priority: optional" >> build/control
-	echo "Description: An NCBI Short Read Archive Upload Management search utility" >> build/control
-	mkdir -p build/usr/local/bin
-	cp srasearch build/usr/local/bin
-#	tar cvzf build/data.tar.gz --owner=0 --group=0 -C build usr
-	tar cvzf build/data.tar.gz -C build usr
-	tar cvzf build/control.tar.gz -C build control
-	cd build && ar rc srasearch-${DEBVERSION}.deb \
+	$(eval DEB_PKG_VERSION := $(shell ./srasearch version))
+	test -d $(DEB_BUILD_DIR) || mkdir $(DEB_BUILD_DIR)
+	echo 2.0 > $(DEB_BUILD_DIR)/debian-binary
+	echo "Package: srasearch" > $(DEB_BUILD_DIR)/control
+	echo "Version: ${DEB_PKG_VERSION}-${DEB_RELEASE_VERSION}" >> $(DEB_BUILD_DIR)/control
+	echo "Architecture: amd64" >> $(DEB_BUILD_DIR)/control
+	echo "Section: science" >> $(DEB_BUILD_DIR)/control
+	echo "Maintainer: indraniel <indraniel@gmail.com>" >> $(DEB_BUILD_DIR)/control
+	echo "Priority: optional" >> $(DEB_BUILD_DIR)/control
+	echo "Description: An NCBI Short Read Archive Upload Management search utility" >> $(DEB_BUILD_DIR)/control
+	mkdir -p $(DEB_BUILD_DIR)/usr/local/bin
+	cp srasearch $(DEB_BUILD_DIR)/usr/local/bin
+	tar cvzf $(DEB_BUILD_DIR)/data.tar.gz --owner=0 --group=0 -C $(DEB_BUILD_DIR) usr
+	tar cvzf $(DEB_BUILD_DIR)/control.tar.gz -C $(DEB_BUILD_DIR) control
+	cd $(DEB_BUILD_DIR) && ar rc srasearch_${DEB_PKG_VERSION}-${DEB_RELEASE_VERSION}.deb \
 		debian-binary control.tar.gz data.tar.gz \
 		&& cd ..
