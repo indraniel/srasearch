@@ -2,7 +2,7 @@
 
 An NCBI Sequence Read Archive (SRA) upload management search utility.
 
-The (SRA) regularly provides a set of [batch telemetry file][2] for laboratories that submit data to its repository.  The telemetry files can help correlate the data a submitter has sent with what the SRA has recived and processed.
+The (SRA) regularly provides a set of [batch telemetry file][2] for laboratories that submit data to its repository.  The telemetry files can help correlate the data a submitter has sent with what the SRA has received and processed.
 
 This utility processes those telemetry files and presents that data through a "Google"-esque search interface.
 
