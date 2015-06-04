@@ -3,17 +3,20 @@ package makeindex
 import (
 	//"github.com/indraniel/srasearch/sra"
 	"github.com/indraniel/srasearch/utils"
-	"bufio"
-	//"encoding/json"
+
 	"github.com/blevesearch/bleve"
+
+	"bufio"
 	"io"
 	"log"
 	"os"
+	"path"
 	"strings"
 	"time"
 )
 
 func CreateSearchIndex(input, output string) {
+	createBaseDir(output)
 	if _, err := os.Stat(output); err == nil {
 		log.Fatalf("Index: '%s' %s %s",
 			output,
@@ -89,6 +92,21 @@ func CreateSearchIndex(input, output string) {
 	timePerDoc := float64(indexDuration) / float64(count)
 	log.Printf("Indexed %d documents, in %.2fs (average %.2fms/doc)\n", count, indexDurationSeconds, timePerDoc/float64(time.Millisecond))
 	log.Println("All Done")
+}
+
+func createBaseDir(dirPath string) {
+	base := path.Dir(dirPath)
+	if _, err := os.Stat(base); os.IsNotExist(err) {
+		log.Printf("'%s' : Doesn't exist - creating path", base)
+		e := os.MkdirAll(base, 0776)
+		if e != nil {
+			log.Fatalln(
+				"Trouble creating directory:",
+				base, ":",
+				e,
+			)
+		}
+	}
 }
 
 //func buildIndexMapping() (*bleve.IndexMapping, error) {
