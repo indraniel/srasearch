@@ -58,9 +58,20 @@ func (gz GZWriter) Write(data []byte) error {
 }
 
 func (gz GZWriter) Close() {
-	gz.buf.Flush()
-	gz.gf.Close()
-	gz.f.Close()
+	err := gz.buf.Flush()
+	if err != nil {
+		log.Fatalf("[%s] Trouble flushing buffer : %s\n", gz.f.Name(), err)
+	}
+
+	err = gz.gf.Close()
+	if err != nil {
+		log.Fatalf("[%s] Trouble closing gzip : %s\n", gz.f.Name(), err)
+	}
+
+	err = gz.f.Close()
+	if err != nil {
+		log.Fatalf("[%s] Trouble closing file : %s\n", gz.f.Name(), err)
+	}
 }
 
 func CompressFile(src string, dst string) error {
