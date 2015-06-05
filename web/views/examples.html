@@ -28,9 +28,20 @@
 
     phs000159 +Type:analysis
 
-### Search for a experiments associated with a BioProject
+### Search for experiments associated with a BioProject
 
     BioProject:PRJNA196921 +Type:experiment
+
+#### Common Selection Refinement
+
+    foo +Type:submission  # a search for "foo", but limit to only submission items
+    foo +Type:study       # a search for "foo", but limit to only study      items
+    foo +Type:sample      # a search for "foo", but limit to only sample     items
+    foo +Type:experiment  # a search for "foo", but limit to only experiment items
+    foo +Type:run         # a search for "foo", but limit to only run        items
+    foo +Type:analysis    # a search for "foo", but limit to only analysis   items
+
+Unforunately, refinements to multiple types, like `foo +Type:experiment,run`, don't work yet.
 
 # Query Language
 
@@ -62,18 +73,7 @@ Prefixing a search term with a `+` or `-` places that term with a respective "MU
 
 Example: `Opsanus +Type:experiment -Alias:Opsanus_beta_Pooled_DNA_2888244747`
 
-The above example will search for items that contain the term "Opsanus" have MUST be of type "experiment", and MUST NOT have an Alias of "Opsanus_beta_Pooled_DNA_2888244747".
-
-#### Common Selection Refinements
-
-    foo +Type:submission  # a search for "foo", but limit to only submission items
-    foo +Type:study       # a search for "foo", but limit to only study      items
-    foo +Type:sample      # a search for "foo", but limit to only sample     items
-    foo +Type:experiment  # a search for "foo", but limit to only experiment items
-    foo +Type:run         # a search for "foo", but limit to only run        items
-    foo +Type:analysis    # a search for "foo", but limit to only run        items
-
-Unforunately, refinements to multiple types, like `foo +Type:experiment,run`, doesn't work yet.
+The above example will search for items that contain the term "Opsanus" which MUST be of type "experiment", and MUST NOT have an Alias of "Opsanus_beta_Pooled_DNA_2888244747".
 
 ### Boosting
 
