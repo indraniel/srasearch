@@ -1,0 +1,19 @@
+#!/bin/bash
+
+USER=ubuntu
+GROUP=ubuntu
+
+BASEDIR=/home/ubuntu
+SUBDIRS=(SRA dumps searchdb)
+
+if [ -e $BASEDIR ]; then
+    ROOT=$BASEDIR/srasearch
+    for subdir in ${SUBDIRS[*]}; do
+        DIR=${ROOT}/${subdir}
+        if [ ! -e $DIR ]; then
+            mkdir -p $DIR
+            chmod 0775 $DIR
+        fi
+    done
+    chown -R ${USER}:${GROUP} $ROOT
+fi
