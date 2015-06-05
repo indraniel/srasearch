@@ -1,0 +1,6 @@
+Package: srasearch
+Architecture: amd64
+Section: science
+Maintainer: indraniel <indraniel@gmail.com>
+Priority: optional
+Description: A NCBI Short Read Archive Upload Management search utility

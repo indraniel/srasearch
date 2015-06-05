@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BASEDIR=/home/ubuntu
+ROOT=$BASEDIR/srasearch
+
+#if [ -e $ROOT ]; then
+#    rm -rfv $ROOT
+#fi

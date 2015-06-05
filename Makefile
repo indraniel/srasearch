@@ -53,18 +53,17 @@ clean:
 debian: srasearch
 	$(eval DEB_PKG_VERSION := $(shell ./srasearch version))
 	test -d $(DEB_BUILD_DIR) || mkdir $(DEB_BUILD_DIR)
+	cp ubuntu.14.04/preinst $(DEB_BUILD_DIR)
+	cp ubuntu.14.04/postrm $(DEB_BUILD_DIR)
+	cp ubuntu.14.04/control $(DEB_BUILD_DIR)
 	echo 2.0 > $(DEB_BUILD_DIR)/debian-binary
-	echo "Package: srasearch" > $(DEB_BUILD_DIR)/control
 	echo "Version: ${DEB_PKG_VERSION}-${DEB_RELEASE_VERSION}" >> $(DEB_BUILD_DIR)/control
-	echo "Architecture: amd64" >> $(DEB_BUILD_DIR)/control
-	echo "Section: science" >> $(DEB_BUILD_DIR)/control
-	echo "Maintainer: indraniel <indraniel@gmail.com>" >> $(DEB_BUILD_DIR)/control
-	echo "Priority: optional" >> $(DEB_BUILD_DIR)/control
-	echo "Description: An NCBI Short Read Archive Upload Management search utility" >> $(DEB_BUILD_DIR)/control
 	mkdir -p $(DEB_BUILD_DIR)/usr/local/bin
 	cp srasearch $(DEB_BUILD_DIR)/usr/local/bin
-	tar cvzf $(DEB_BUILD_DIR)/data.tar.gz --owner=0 --group=0 -C $(DEB_BUILD_DIR) usr
-	tar cvzf $(DEB_BUILD_DIR)/control.tar.gz -C $(DEB_BUILD_DIR) control
+	mkdir -p $(DEB_BUILD_DIR)/etc/init
+	cp ubuntu.14.04/srasearch.conf $(DEB_BUILD_DIR)/etc/init
+	tar cvzf $(DEB_BUILD_DIR)/data.tar.gz --owner=0 --group=0 -C $(DEB_BUILD_DIR) usr etc
+	tar cvzf $(DEB_BUILD_DIR)/control.tar.gz -C $(DEB_BUILD_DIR) control preinst postrm
 	cd $(DEB_BUILD_DIR) && ar rc srasearch_${DEB_PKG_VERSION}-${DEB_RELEASE_VERSION}.deb \
 		debian-binary control.tar.gz data.tar.gz \
 		&& cd ..
