@@ -1,10 +1,10 @@
 # SRASearch
 
-An NCBI Sequence Read Archive (SRA) upload management search utility.
+A NCBI Sequence Read Archive (SRA) upload management search utility.
 
-The (SRA) regularly provides a set of [batch telemetry file][2] for laboratories that submit data to its repository.  The telemetry files can help correlate the data a submitter has sent with what the SRA has received and processed.
+The (SRA) a regularly updated set of [batch telemetry files][2] for laboratories that submit data to its repository.  The telemetry files can help track the information submitter has sent from a given center with what the SRA has received and processed.
 
-This utility processes those telemetry files and presents that data through a "Google"-esque search interface.
+This utility processes these telemetry files and presents that data through a "Google"-esque search interface.
 
 ## BUILDING
 
@@ -26,7 +26,7 @@ Setup the git repository:
     git clone git@github.com:indraniel/srasearch.git
     cd srasearch/
 
-### Initialize the depdencies
+### Initialize the dependencies
 
     make prepare
 
