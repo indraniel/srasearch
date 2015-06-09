@@ -2,7 +2,7 @@
 
 A NCBI Sequence Read Archive (SRA) upload management search utility.
 
-The (SRA) a regularly updated set of [batch telemetry files][2] for laboratories that submit data to its repository.  The telemetry files can help track the information submitter has sent from a given center with what the SRA has received and processed.
+The SRA produces a regularly updated set of [batch telemetry files][2] for laboratories that submit data to its repository.  The telemetry files can help track the information a submitter has sent from a given center with what the SRA has received and processed.
 
 This utility processes these telemetry files and presents that data through a "Google"-esque search interface.
 
@@ -40,9 +40,9 @@ You should now see a `srasearch` executable inside the `$GOPATH/src/github.com/i
 
 For the examples below we are using the SRA batch telemetry files available to the [McDonnell Genome Institute][4]; which has a NCBI center abbreviation name `WUGSC`.
 
-The SRA provides monthly full and daily incremental versions of the batch telemetry files.  Using these we can create an intermediary file, an "SRA Dump", which is collection of JSON documents.
+The SRA provides monthly full and daily incremental versions of the batch telemetry files.  Using these we can create an "SRA Dump" file, an intermediary file which is a collection of JSON documents.
 
-`srasearch` will incrementally build upon prior "SRA Dumps" as new information is collected.
+`srasearch` will build upon prior "SRA Dumps" as new incremental telemetry files are obtained.
 
 ### Initializing a SRA Dump
 
