@@ -1,6 +1,6 @@
 # SRASearch
 
-A NCBI Sequence Read Archive (SRA) upload management search utility.
+A [NCBI Sequence Read Archive (SRA)][8] upload management search utility.
 
 The SRA produces a regularly updated set of [batch telemetry files][2] for laboratories that submit data to its repository.  The telemetry files can help track the information a submitter has sent from a given center with what the SRA has received and processed.
 
@@ -103,3 +103,4 @@ ISC
 [5]: https://github.com/boltdb/bolt
 [6]: https://github.com/tools/godep
 [7]: https://golang.org/doc/install
+[8]: http://www.ncbi.nlm.nih.gov/sra
